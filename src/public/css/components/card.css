@@ -1,0 +1,102 @@
+/*.cards {
+    padding: 3rem 0;
+    justify-content: center;
+	flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.card {
+	background-color: #ffffff;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	width: 250px;
+	padding: 1.5rem;
+	text-align: center;
+	transition: transform 0.3s ease;
+	cursor: pointer;
+}
+
+.card:hover {
+	transform: translateY(-5px);
+}
+
+.card-icon {
+	font-size: 2em;
+	color: #ff6700;
+	margin-bottom: 0.5rem;
+}
+
+.card-title {
+	font-size: 1.2em;
+	font-weight: bold;
+	color: #333;
+	margin: 0.5rem 0;
+}*/
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# Carding
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    margin: 1rem;
+    justify-content: space-around;
+}
+
+.card {
+    display: flex;
+    padding: 24px;
+    flex-basis: 20%;
+    position: relative;
+    border-radius: 10px;
+    background: white;
+    flex-direction: column;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease-in-out;
+    border: 2px solid white;
+}
+
+.card:hover {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+}
+
+.card-top {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /*gap: 8px;*/
+    margin-bottom: 32px;
+}
+
+.card-image {
+    width: 100%;
+    /*height: 360px;*/
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.card-title {
+    border-left: 3px solid var(--darkBlue);
+    padding-left: 12px;
+}
+
+.card-button {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: auto;
+    padding: 16px;
+    color: #000;
+    border-radius: 10px;
+    box-shadow: 0px 0px 0px 1px black inset;
+    transition: background 0.3s ease;
+}
+
+.card-button:hover {
+    background-color: var(--darkBlue);
+    color: white;
+}
