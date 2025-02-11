@@ -1,4 +1,5 @@
 // Imports
+import { keepAliveRenderdotCom } from "@/utils/functions";
 import { connectDatabase } from "@/base/Database";
 import { checkConfig } from "@/utils/config";
 import { resolve } from "path";
@@ -54,6 +55,10 @@ try {
 	app.listen(port, () => {
 		Logger.success(`Server is running on port ${port}`);
 	});
+
+	setInterval(async () => {
+		await keepAliveRenderdotCom();
+	}, 30000);
 
 } catch (error: any) {
 	console.log(error.stack);
