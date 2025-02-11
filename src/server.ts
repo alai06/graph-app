@@ -28,7 +28,7 @@ try {
 
 	// Middleware
 	app.use(express.urlencoded({ extended: false }));
-	app.use(express.static(resolve('./src/public')));
+	app.use(express.static(resolve('./src/public'), { extensions: ['html', 'css'] }));
 	app.use(express.json());
 	app.use(cors({
 		origin: "*",
