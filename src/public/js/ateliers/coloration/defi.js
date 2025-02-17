@@ -8,6 +8,7 @@ export const initDefiMode = (dynamicButtons) => {
     let closestNode = null;
     const snapDistance = 50;
     const defaultColor = '#cccccc';
+    let difficulty = "";
 
     populateGraphSelect()
 
@@ -24,6 +25,8 @@ export const initDefiMode = (dynamicButtons) => {
             setTimeout(async () => {
     
                 const pastilleCounts = graphData.pastilleCounts;
+
+                difficulty = graphData.difficulty;
     
                 addDynamicColorTokens(pastilleCounts, cyDefi);
     
@@ -40,7 +43,7 @@ export const initDefiMode = (dynamicButtons) => {
         }
     });    
 
-    addDynamicButton(dynamicButtons, 'Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyDefi));
+    addDynamicButton(dynamicButtons, 'Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyDefi, difficulty));
     addDynamicButton(dynamicButtons, 'Réinitialiser la Coloration', 'reset-colors-btn', resetColorsDefi);
 
     function addDynamicColorTokens(pastilleCounts, cy) {

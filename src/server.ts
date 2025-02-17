@@ -56,9 +56,11 @@ try {
 		Logger.success(`Server is running on port ${port}`);
 	});
 
-	setInterval(async () => {
-		await keepAliveRenderdotCom();
-	}, 30000);
+	if(process.env.NODE_ENV === "production") {
+		setInterval(async () => {
+			await keepAliveRenderdotCom();
+		}, 30000);
+	};
 
 } catch (error: any) {
 	console.log(error.stack);

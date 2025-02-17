@@ -20,7 +20,11 @@ export const rgbToHex = (rgb) => {
     return `#${result.join('')}`;
 }
 
-export const validateGraph = () => {
+export const validateGraph = (cyInstance, difficulty) => {
+
+    console.log(cyInstance);
+    console.log(difficulty);
+
     const defaultColor = '#cccccc';
     let isCompleted = true;
     let isValid = true;
@@ -44,12 +48,30 @@ export const validateGraph = () => {
     });
 
     if (!isCompleted) {
-        alert("Le graphe n'est pas entièrement coloré.");
+        Swal.fire({
+            icon: "warning",
+            title: "Attention !",
+            text: "Le graphe n'est pas entièrement coloré.",
+        });
+    } else if (difficulty === "Impossible") {
+        Swal.fire({
+            icon: "error",
+            title: "Erreur !",
+            text: "En essayant le graphe, vous venez de comprendre pourquoi il est dans la catégorie impossible.",
+        });
     } else if (!isValid) {
-        alert("Erreur : Deux sommets adjacents ont la même couleur.");
+        Swal.fire({
+            icon: "error",
+            title: "Erreur !",
+            text: "Deux sommets adjacents ont la même couleur.",
+        });
     } else {
-        alert("Bravo ! La coloration est valide.");
-    };
+        Swal.fire({
+            icon: "success",
+            title: "Félicitations !",
+            text: "Bravo ! La coloration est valide.",
+        });
+    }    
 };
 
 export const loadPredefinedGraph = async (graphId) => {
@@ -69,6 +91,7 @@ export const loadPredefinedGraph = async (graphId) => {
                 data: graphConfig.data,
                 optimalColoring: graphConfig.optimalColoring || null,
                 pastilleCounts: graphConfig.pastilleCounts || null,
+                difficulty: graphConfig.difficulty || "",
             };
         } else {
             throw new Error(`Données invalides pour le graphe avec l'ID ${graphId}`);
