@@ -86,16 +86,22 @@ export const initLibreMode = (dynamicButtons) => {
 
     cyLibre.on('free', 'node', (evt) => {
         const colorNode = evt.target;
-
+    
         if (closestNode && draggedColor) {
-            closestNode.style('background-color', draggedColor);
-            closestNode.style('border-color', '#666');
+            const currentColor = rgbToHex(closestNode.style('background-color'));
+    
+            if (currentColor === defaultColor) {
+                closestNode.style('background-color', draggedColor);
+                closestNode.style('border-color', '#666');
+                cyLibre.remove(colorNode);
+            }
+        } else {
+            cyLibre.remove(colorNode);
         }
-
-        cyLibre.remove(colorNode);
+    
         draggedColor = null;
         closestNode = null;
-    });
+    });    
 
     cyLibre.on('mousemove', (evt) => {
         if (draggedColor) {

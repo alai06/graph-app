@@ -16,32 +16,32 @@ export const initDefiMode = (dynamicButtons) => {
         try {
             const graphId = document.querySelector('#predefined-graph-select').value;
             const graphData = await loadPredefinedGraph(graphId);
-    
+
             if (!graphData || !graphData.data) {
                 alert("Erreur lors du chargement du graphe.");
                 return;
             }
-    
+
             setTimeout(async () => {
-    
+
                 const pastilleCounts = graphData.pastilleCounts;
 
                 difficulty = graphData.difficulty;
-    
+
                 addDynamicColorTokens(pastilleCounts, cyDefi);
-    
+
                 cyDefi.nodes().forEach((node) => {
                     if (!node.data('isColorNode')) {
                         node.lock();
                     }
                 });
             }, 100);
-    
+
         } catch (error) {
             console.error("Erreur lors du chargement du graphe :", error.message);
             alert("Impossible de charger le graphe. Veuillez réessayer.");
         }
-    });    
+    });
 
     addDynamicButton(dynamicButtons, 'Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyDefi, difficulty));
     addDynamicButton(dynamicButtons, 'Réinitialiser la Coloration', 'reset-colors-btn', resetColorsDefi);
@@ -49,11 +49,11 @@ export const initDefiMode = (dynamicButtons) => {
     function addDynamicColorTokens(pastilleCounts, cy) {
         let currentXPosition = 50;
 
-        if(!pastilleCounts) {
+        if (!pastilleCounts) {
             alert("Impossible de charger les pastilles de couleur.");
             return;
         }
-    
+
         Object.entries(pastilleCounts).forEach(([color, count]) => {
             for (let i = 0; i < count; i++) {
                 cy.add({
@@ -74,9 +74,9 @@ export const initDefiMode = (dynamicButtons) => {
                 currentXPosition += 50;
             }
         });
-    
+
         cy.layout({ name: 'preset' }).run();
-    }    
+    }
 
     function findFreePositionX(cy) {
         const maxX = 1000;
@@ -105,6 +105,7 @@ export const initDefiMode = (dynamicButtons) => {
 
         if (node.data('isColorNode')) {
             draggedColor = node.style('background-color');
+            node.data('initialPosition', { x: node.position('x'), y: node.position('y') });
         }
     });
 
@@ -141,9 +142,20 @@ export const initDefiMode = (dynamicButtons) => {
         const colorNode = evt.target;
 
         if (closestNode && draggedColor) {
-            closestNode.style('background-color', draggedColor);
-            closestNode.style('border-color', '#666');
-            cyDefi.remove(colorNode);
+            const currentColor = rgbToHex(closestNode.style('background-color'));
+
+            if (currentColor !== defaultColor) {
+                const initialPosition = colorNode.data('initialPosition');
+                if (initialPosition) colorNode.position(initialPosition);
+
+            } else {
+                closestNode.style('background-color', draggedColor);
+                closestNode.style('border-color', '#666');
+                cyDefi.remove(colorNode);
+            }
+        } else {
+            const initialPosition = colorNode.data('initialPosition');
+            if (initialPosition) colorNode.position(initialPosition);
         }
 
         draggedColor = null;

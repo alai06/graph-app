@@ -97,8 +97,8 @@ export const initCreationMode = (dynamicButtons) => {
             }
         });
     
-        addDynamicButton('Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyLibre));
-        addDynamicButton('Réinitialiser la Coloration', 'reset-colors-btn', () => resetColorsLibre(cyLibre));
+        addDynamicButton(dynamicButtons, 'Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyLibre));
+        addDynamicButton(dynamicButtons, 'Réinitialiser la Coloration', 'reset-colors-btn', () => resetColorsLibre(cyLibre));
     
         const colorsConfig = generateRandomColors(cyLibre);
         addInfiniteColorTokens(colorsConfig, cyLibre);

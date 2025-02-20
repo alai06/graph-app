@@ -85,6 +85,11 @@ export const loadPredefinedGraph = async (graphId) => {
 
         const graphConfig = await response.json();
         if (graphConfig?.data) {
+
+            graphConfig.data.nodes.forEach(node => {
+                node.position.y += 80;
+            });
+
             cy.add(graphConfig.data);
 
             return {
@@ -152,10 +157,20 @@ export const resetColorsDefi = () => {
         }
     });
 
+    // Supprimer toutes les pastilles existantes
     cy.nodes().filter(node => node.data('isColorNode')).forEach(node => cy.remove(node));
 
     let currentXPosition = 50;
-    Object.entries(colorCounts).forEach(([color, count]) => {
+
+    // Fusionner les pastilles utilisées et inutilisées
+    const allColors = { ...colorCounts };
+
+    Object.entries(unusedColors).forEach(([color, count]) => {
+        allColors[color] = (allColors[color] || 0) + count;
+    });
+
+    // Recréer toutes les pastilles à leurs positions
+    Object.entries(allColors).forEach(([color, count]) => {
         for (let i = 0; i < count; i++) {
             cy.add({
                 group: 'nodes',
@@ -178,6 +193,7 @@ export const resetColorsDefi = () => {
 
     cy.layout({ name: 'preset' }).run();
 };
+
 
 export const generateRandomColors = (cy) => {
     const numNodes = cy.nodes().length;
