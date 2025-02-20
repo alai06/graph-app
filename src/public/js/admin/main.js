@@ -290,8 +290,15 @@ saveGraphBtn.addEventListener('click', async () => {
     } else {
         response = await addGraph(graphPayload);
     }
+	
 
-    if (response) alert(`Graphe ${editingGraphId ? "modifié" : "ajouté"} avec succès !`);
+    if (response) {
+		Swal.fire({
+			icon: "success",
+			title: "Félicitations !",
+			text: `Graphe ${editingGraphId ? "modifié" : "ajouté"} avec succès !`,
+		});
+	}
     
     displayGraphs();
     closeGraphModal();

@@ -211,20 +211,4 @@ function validateGraphLibre(cy, optimalColorCount) {
             });
         }
     }
-
-    if (!isCompleted) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Erreur',
-            text: "Le graphe n'est pas entièrement coloré.",
-        })
-    } else if (!isValid) {
-        alert("Erreur : Deux sommets adjacents ont la même couleur.");
-    } else {
-        if () {
-            alert.");
-        } else {
-            alert("La coloration est valide et optimale, vous avez utiliser le minimum de couleur.");
-        }
-    }
 }
