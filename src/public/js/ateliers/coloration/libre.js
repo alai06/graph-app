@@ -18,7 +18,11 @@ export const initLibreMode = (dynamicButtons) => {
             const graphData = await loadPredefinedGraph(graphId);
 
             if (!graphData || !graphData.data) {
-                alert("Erreur lors du chargement du graphe.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: "Impossible de charger le graphe. Veuillez réessayer.",
+                })
                 return;
             }
 
@@ -86,10 +90,10 @@ export const initLibreMode = (dynamicButtons) => {
 
     cyLibre.on('free', 'node', (evt) => {
         const colorNode = evt.target;
-    
+
         if (closestNode && draggedColor) {
             const currentColor = rgbToHex(closestNode.style('background-color'));
-    
+
             if (currentColor === defaultColor) {
                 closestNode.style('background-color', draggedColor);
                 closestNode.style('border-color', '#666');
@@ -98,10 +102,10 @@ export const initLibreMode = (dynamicButtons) => {
         } else {
             cyLibre.remove(colorNode);
         }
-    
+
         draggedColor = null;
         closestNode = null;
-    });    
+    });
 
     cyLibre.on('mousemove', (evt) => {
         if (draggedColor) {
@@ -180,12 +184,45 @@ function validateGraphLibre(cy, optimalColorCount) {
     });
 
     if (!isCompleted) {
-        alert("Le graphe n'est pas entièrement coloré.");
+        Swal.fire({
+            icon: "warning",
+            title: "Attention !",
+            text: "Le graphe n'est pas entièrement coloré.",
+        });
+    } else if (!isValid) {
+        Swal.fire({
+            icon: "error",
+            title: "Erreur !",
+            text: "Deux sommets adjacents ont la même couleur.",
+        });
+    } else {
+
+        if (usedColors.size > optimalColorCount) {
+            Swal.fire({
+                icon: "success",
+                title: "Félicitations !",
+                text: "La coloration est valide mais elle n'est pas optimale, vous pouvez utiliser moins de couleur.",
+            });
+        }else{
+            Swal.fire({
+                icon: "success",
+                title: "Félicitations !",
+                text: "La coloration est valide et optimale, vous avez utilisé le minimum de couleur.",
+            });
+        }
+    }
+
+    if (!isCompleted) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: "Le graphe n'est pas entièrement coloré.",
+        })
     } else if (!isValid) {
         alert("Erreur : Deux sommets adjacents ont la même couleur.");
     } else {
-        if (usedColors.size > optimalColorCount) {
-            alert("La coloration est valide mais elle n'est pas optimale, vous pouvez utiliser moins de couleur.");
+        if () {
+            alert.");
         } else {
             alert("La coloration est valide et optimale, vous avez utiliser le minimum de couleur.");
         }

@@ -205,7 +205,11 @@ const validateOptimalColoring = (event) => {
         optimalColoringInput.value = 1;
     } else if (inputValue > totalNodes) {
         event.preventDefault();
-        alert(`Le nombre maximal de couleurs est ${totalNodes}, car il y a ${totalNodes} sommets.`);
+		Swal.fire({
+			icon: "warning",
+			title: "Attention !",
+			text: `Le nombre maximal de couleurs est ${totalNodes}, car il y a ${totalNodes} sommets.`,
+		});
         optimalColoringInput.value = '';
     } else {
         optimalColoringInput.dataset.prevValue = inputValue;

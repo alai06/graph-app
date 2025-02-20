@@ -18,7 +18,11 @@ export const initDefiMode = (dynamicButtons) => {
             const graphData = await loadPredefinedGraph(graphId);
 
             if (!graphData || !graphData.data) {
-                alert("Erreur lors du chargement du graphe.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: "Impossible de charger le graphe. Veuillez réessayer.",
+                })
                 return;
             }
 
@@ -39,7 +43,11 @@ export const initDefiMode = (dynamicButtons) => {
 
         } catch (error) {
             console.error("Erreur lors du chargement du graphe :", error.message);
-            alert("Impossible de charger le graphe. Veuillez réessayer.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: "Impossible de charger le graphe. Veuillez réessayer.",
+            })
         }
     });
 
@@ -50,7 +58,11 @@ export const initDefiMode = (dynamicButtons) => {
         let currentXPosition = 50;
 
         if (!pastilleCounts) {
-            alert("Impossible de charger les pastilles de couleur.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: "Impossible de charger les pastilles. Veuillez réessayer.",
+            })
             return;
         }
 

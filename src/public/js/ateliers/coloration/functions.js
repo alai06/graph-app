@@ -102,8 +102,11 @@ export const loadPredefinedGraph = async (graphId) => {
             throw new Error(`Données invalides pour le graphe avec l'ID ${graphId}`);
         }
     } catch (error) {
-        console.error(`Erreur : ${error.message}`);
-        alert("Impossible de charger le graphe. Veuillez réessayer.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: "Impossible de charger le graphe. Veuillez réessayer.",
+        });
         return { data: [], optimalColoring: null };
     }
 };
@@ -122,7 +125,11 @@ export const addEdge = () => {
         cy.add({ data: { source: sourceId, target: targetId } });
         cy.layout({ name: 'grid' }).run();
     } else {
-        alert("IDs invalides ou identiques. Veuillez réessayer.");
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: "IDs invalides ou identiques. Veuillez réessayer.",
+        });
     }
 };
 
@@ -319,6 +326,10 @@ export const populateGraphSelect = async () => {
 
     } catch (error) {
         console.error(`Erreur : ${error.message}`);
-        alert('Impossible de charger les graphes. Veuillez réessayer plus tard.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: "Impossible de charger les graphes. Veuillez réessayer.",
+        });
     }
 };
