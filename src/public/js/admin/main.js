@@ -75,39 +75,39 @@ const displayGraphs = async () => {
 };
 
 const openGraphModal = (title, graph = null) => {
-    graphModal.style.display = 'block';
-    document.querySelector('#modal-title').textContent = title;
+	graphModal.style.display = 'block';
+	document.querySelector('#modal-title').textContent = title;
 
-    if (graph) {
-        graphNameInput.value = graph.name;
-        selectDifficulty.value = graph.difficulty;
-        optimalColoringInput.value = graph.optimalColoring || '';
+	if (graph) {
+		graphNameInput.value = graph.name;
+		selectDifficulty.value = graph.difficulty;
+		optimalColoringInput.value = graph.optimalColoring || '';
 
-        cy = initializeCytoscape(graph.data);
-        editingGraphId = graph._id;
+		cy = initializeCytoscape(graph.data);
+		editingGraphId = graph._id;
 
-        if (graph.pastilleCounts) {
-            colorConfigContainer.style.display = 'block';
-            generateColorInputs(graph.optimalColoring, graph.pastilleCounts || {});
-        } else {
-            colorConfigContainer.style.display = 'none';
-        }
-    } else {
-        graphNameInput.value = '';
-        selectDifficulty.value = '';
-        optimalColoringInput.value = '';
-        cy = initializeCytoscape();
-        editingGraphId = null;
-        colorConfigContainer.style.display = 'none';
-    }
+		if (graph.pastilleCounts) {
+			colorConfigContainer.style.display = 'block';
+			generateColorInputs(graph.optimalColoring, graph.pastilleCounts || {});
+		} else {
+			colorConfigContainer.style.display = 'none';
+		}
+	} else {
+		graphNameInput.value = '';
+		selectDifficulty.value = '';
+		optimalColoringInput.value = '';
+		cy = initializeCytoscape();
+		editingGraphId = null;
+		colorConfigContainer.style.display = 'none';
+	}
 
-    handleDisableSaveBtn();
+	handleDisableSaveBtn();
 
-    graphNameInput.addEventListener('input', handleDisableSaveBtn);
-    selectDifficulty.addEventListener('input', handleDisableSaveBtn);
+	graphNameInput.addEventListener('input', handleDisableSaveBtn);
+	selectDifficulty.addEventListener('input', handleDisableSaveBtn);
 	optimalColoringInput.addEventListener('input', validateOptimalColoring);
-    optimalColoringInput.addEventListener('input', handleDisableSaveBtn);
-    optimalColoringInput.addEventListener('input', handleColoringChange);
+	optimalColoringInput.addEventListener('input', handleDisableSaveBtn);
+	optimalColoringInput.addEventListener('input', handleColoringChange);
 };
 
 const handleColoringChange = () => {
@@ -162,67 +162,72 @@ const generateColorInputs = (optimalColorCount, existingConfig) => {
 };
 
 const validatePastilleInputs = () => {
-    const totalNodes = cy.nodes().length;
-    const inputs = document.querySelectorAll('#color-inputs input');
+	const totalNodes = cy.nodes().length;
+	const inputs = document.querySelectorAll('#color-inputs input');
 
-    inputs.forEach(input => {
-        input.dataset.prevValue = input.value || "1";
-    });
+	inputs.forEach(input => {
+		input.dataset.prevValue = input.value || "1";
+	});
 
-    inputs.forEach(input => {
-        input.addEventListener('input', (event) => {
-            let currentValue = parseInt(event.target.value || 0, 10);
-            let prevValue = parseInt(input.dataset.prevValue || "1", 10);
-            
-            let usedPastilles = Array.from(inputs).reduce((sum, inp) => 
-                sum + (inp === input ? 0 : parseInt(inp.value || 0, 10)), 
-                0
-            );
+	inputs.forEach(input => {
+		input.addEventListener('input', (event) => {
+			let currentValue = parseInt(event.target.value || 0, 10);
+			let prevValue = parseInt(input.dataset.prevValue || "1", 10);
 
-            if (currentValue < 1) {
-                event.target.value = 1;
-            } else if (usedPastilles + currentValue > totalNodes) {
-                event.target.value = prevValue;
-            } else {
-                input.dataset.prevValue = event.target.value;
-            }
+			let usedPastilles = Array.from(inputs).reduce((sum, inp) =>
+				sum + (inp === input ? 0 : parseInt(inp.value || 0, 10)),
+				0
+			);
 
-            handleDisableSaveBtn();
-        });
-    });
+			if (currentValue < 1) {
+				event.target.value = 1;
+			} else if (usedPastilles + currentValue > totalNodes) {
+				event.target.value = prevValue;
+			} else {
+				input.dataset.prevValue = event.target.value;
+			}
 
-    handleDisableSaveBtn();
+			handleDisableSaveBtn();
+		});
+	});
+
+	handleDisableSaveBtn();
 };
 
 const validateOptimalColoring = (event) => {
-    const totalNodes = cy.nodes().length;
-    let inputValue = parseInt(optimalColoringInput.value, 10) || 1;
+	const totalNodes = cy.nodes().length;
+	let inputValue = parseInt(optimalColoringInput.value, 10) || 1;
 
-    optimalColoringInput.max = totalNodes;
+	optimalColoringInput.max = totalNodes;
 
-    if (inputValue < 1) {
-        event.preventDefault();
-        optimalColoringInput.value = 1;
-    } else if (inputValue > totalNodes) {
-        event.preventDefault();
+	if (inputValue < 1) {
+		event.preventDefault();
+		optimalColoringInput.value = 1;
+	} else if (inputValue > totalNodes) {
+		event.preventDefault();
 		Swal.fire({
 			icon: "warning",
 			title: "Attention !",
 			text: `Le nombre maximal de couleurs est ${totalNodes}, car il y a ${totalNodes} sommets.`,
 		});
-        optimalColoringInput.value = '';
-    } else {
-        optimalColoringInput.dataset.prevValue = inputValue;
-    }
+		optimalColoringInput.value = '';
+	} else {
+		optimalColoringInput.dataset.prevValue = inputValue;
+	}
 };
 
+let hoveredNode = null; // Stocke le nœud sous la souris
+let selectedNodeCurve = null; // Stocke le premier nœud sélectionné
+
 const initializeCytoscape = (data = []) => {
+
 	const instance = cytoscape({
 		container: document.querySelector('#cy-container'),
 		elements: [],
 		style: [
 			{ selector: 'node', style: { 'background-color': '#cccccc', label: 'data(label)' } },
-			{ selector: 'edge', style: { 'line-color': '#666', 'width': 2 } },
+			{ selector: 'edge.default', style: { 'line-color': '#666', 'width': 2 } },
+			{ selector: 'edge.bezier', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': 50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } }
 		],
 		layout: { name: 'grid' },
 	});
@@ -230,7 +235,16 @@ const initializeCytoscape = (data = []) => {
 	if (Object.keys(data).length > 0) {
 		instance.add(data);
 	};
+	
+	instance.on('mouseover', 'node', (event) => {
+		hoveredNode = event.target;
+	});
+	
+	instance.on('mouseout', 'node', () => {
+		hoveredNode = null;
+	});
 
+	document.addEventListener('keydown', (event) => handleEdgeCurve(event));
 	instance.on('tap', 'node', (event) => handleNodeClick(event.target));
 	instance.on('cxttap', 'node, edge', (event) => handleElementContextMenu(event.target));
 	instance.on('tap', (event) => {
@@ -240,6 +254,29 @@ const initializeCytoscape = (data = []) => {
 	});
 
 	return instance;
+};
+
+const handleEdgeCurve = (event) => {
+    if (event.key.toLowerCase() === 'c') {
+        if (hoveredNode) {
+            if (!selectedNodeCurve) {
+                selectedNodeCurve = hoveredNode;
+                highlightNode(selectedNodeCurve);
+            } else if (selectedNodeCurve !== hoveredNode) {
+                cy.add({
+                    group: 'edges',
+                    data: {
+                        source: selectedNodeCurve.id(),
+                        target: hoveredNode.id(),
+                    },
+                    classes: 'bezier',
+                });
+
+                unhighlightNode(selectedNodeCurve);
+                selectedNodeCurve = null;
+            }
+        }
+    }
 };
 
 addNodeBtn.addEventListener('click', () => {
@@ -266,42 +303,42 @@ saveGraphBtn.addEventListener('click', async () => {
 
 	cy.layout({ name: 'preset', positions: (node) => node.position(), fit: true }).run();
 
-    const name = graphNameInput.value.trim();
-    const difficulty = selectDifficulty.value;
-    const optimalColoring = parseInt(optimalColoringInput.value, 10);
-    const graphData = cy.json().elements;
+	const name = graphNameInput.value.trim();
+	const difficulty = selectDifficulty.value;
+	const optimalColoring = parseInt(optimalColoringInput.value, 10);
+	const graphData = cy.json().elements;
 
-    const pastilleCounts = {};
-    document.querySelectorAll('#color-inputs input').forEach(input => {
-        pastilleCounts[input.dataset.color] = parseInt(input.value, 10) || 1;
-    });
+	const pastilleCounts = {};
+	document.querySelectorAll('#color-inputs input').forEach(input => {
+		pastilleCounts[input.dataset.color] = parseInt(input.value, 10) || 1;
+	});
 
-    const graphPayload = {
-        name,
-        data: { nodes: graphData.nodes, edges: graphData.edges },
-        difficulty,
-        optimalColoring,
-        pastilleCounts
-    };
+	const graphPayload = {
+		name,
+		data: { nodes: graphData.nodes, edges: graphData.edges },
+		difficulty,
+		optimalColoring,
+		pastilleCounts
+	};
 
-    let response;
-    if (editingGraphId) {
-        response = await editGraph(editingGraphId, graphPayload);
-    } else {
-        response = await addGraph(graphPayload);
-    }
-	
+	let response;
+	if (editingGraphId) {
+		response = await editGraph(editingGraphId, graphPayload);
+	} else {
+		response = await addGraph(graphPayload);
+	}
 
-    if (response) {
+
+	if (response) {
 		Swal.fire({
 			icon: "success",
 			title: "Félicitations !",
 			text: `Graphe ${editingGraphId ? "modifié" : "ajouté"} avec succès !`,
 		});
 	}
-    
-    displayGraphs();
-    closeGraphModal();
+
+	displayGraphs();
+	closeGraphModal();
 });
 
 
@@ -348,6 +385,7 @@ const handleNodeClick = (node) => {
 		cy.add({
 			group: 'edges',
 			data: { source: selectedNode.id(), target: node.id() },
+			classes: 'default',
 		});
 		resetNodeSelection();
 	}

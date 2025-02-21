@@ -15,14 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	const infoBtn = document.querySelector('#info-btn');
 	const infoSection = document.querySelector('#info-section');
 	const infoText = document.querySelector('#info-text');
-	const closeInfoBtn = document.querySelector('#close-info-btn');
 
-	infoBtn.addEventListener('click', () => {
-		infoSection.style.display = 'block';
-	});
-
-	closeInfoBtn.addEventListener('click', () => {
-		infoSection.style.display = 'none';
+	infoBtn.addEventListener("click", function () {
+		if (infoSection.style.display === "none" || infoSection.style.display === "") {
+			infoSection.style.display = "block";
+			infoBtn.textContent = "❌ Fermer les règles";
+		} else {
+			infoSection.style.display = "none";
+			infoBtn.textContent = "ℹ️ Voir les règles";
+		}
 	});
 
 	const displayModeInfo = (mode) => {
@@ -30,39 +31,47 @@ document.addEventListener('DOMContentLoaded', () => {
 		switch (mode) {
 			case 'Défi':
 				infoText.innerHTML = `
-					<strong>Objectif :</strong><br/>
-					- deux sommets adjacents ne doivent jamais avoir la même couleur. <br/>
-					- Vous possèdez un nombre limité de pastilles que vous devez placer correctement.<br/><br/>
-					<strong>Étapes :</strong><br/>
-					- Sélectionnez un graphe prédéfini.<br/>
-					- Appliquez les couleurs tout en respectant l'objectif.<br/>
-					- Si vous pensez avoir réussi, cliquez sur le bouton "Valider la coloration".`;
+					<strong>🎯 Objectif :</strong><br/>
+					- Assurez-vous que <strong>deux sommets adjacents</strong> n'ont jamais la même couleur !<br/>
+					- Vous disposez d’un <strong>nombre limité</strong> de pastilles colorées. Saurez-vous les placer intelligemment ?<br/><br/>
+					<strong>🛠️ Comment jouer ?</strong><br/>
+					1️⃣ Choisissez un graphe prédéfini.<br/>
+					2️⃣ Appliquez vos couleurs en respectant les règles.<br/>
+					3️⃣ Lorsque vous êtes sûr de votre solution, cliquez sur <strong>"Valider la coloration"</strong> pour voir si vous avez réussi !<br/><br/>
+					⚠️ Attention, chaque mouvement compte !`;
 				break;
+	
 			case 'Libre':
 				infoText.innerHTML = `
-					<strong>Objectif :</strong><br/>
-					- deux sommets adjacents ne doivent jamais avoir la même couleur. <br/>
-					- Vous possèdez un nombre illimité de pastilles que vous devez placer correctement.<br/>
-					- Il se peut que votre solution soit la meilleure possible ou qu'il soit possible de réduire le nombre de couleur<br/><br/>
-					<strong>Étapes :</strong><br/>
-					- Sélectionnez un graphe prédéfini.<br/>
-					- Appliquez les couleurs tout en respectant l'objectif.<br/>
-					- Si vous pensez avoir réussi, cliquez sur le bouton "Valider la coloration".`;
+					<strong>🎯 Objectif :</strong><br/>
+					- Coloriez le graphe en respectant la règle d'or : <strong>deux sommets reliés ne doivent jamais partager la même couleur</strong> !<br/>
+					- Cette fois, vous avez un <strong>nombre illimité</strong> de pastilles, mais essayez de minimiser leur utilisation !<br/>
+					- Peut-être avez-vous trouvé une solution... mais est-ce la plus optimale ?<br/><br/>
+					<strong>🛠️ Comment jouer ?</strong><br/>
+					1️⃣ Sélectionnez un graphe prédéfini.<br/>
+					2️⃣ Testez différentes combinaisons de couleurs.<br/>
+					3️⃣ Lorsque vous êtes satisfait, cliquez sur <strong>"Valider la coloration"</strong> et vérifiez si vous pouvez encore améliorer votre solution !<br/><br/>
+					💡 Conseil : Une solution parfaite utilise <strong>le moins de couleurs possible</strong>. À vous de jouer !`;
 				break;
+	
 			case 'Création':
 				infoText.innerHTML = `
-					<strong>Objectif :</strong><br/>
-					- deux sommets adjacents ne doivent jamais avoir la même couleur.<br/><br/>
-					<strong>Étapes :</strong><br/>
-					- Ajoutez des sommets et reliez-les par des arêtes.<br/>
-					- Passez en Mode Libre pour tester la coloration.<br/>
-					- Vérifiez si votre graphe respecte l'objectif.`;
+					<strong>🎯 Objectif :</strong><br/>
+					- Créez votre propre graphe et testez sa difficulté !<br/>
+					- Rappelez-vous : <strong>deux sommets adjacents ne doivent jamais partager la même couleur</strong> !<br/><br/>
+					<strong>🛠️ Comment jouer ?</strong><br/>
+					1️⃣ Ajoutez des sommets et reliez-les avec des arêtes pour façonner votre graphe.<br/>
+					2️⃣ Passez en <strong>Mode Libre</strong> pour essayer de le colorer.<br/>
+					3️⃣ Vérifiez si votre graphe est réalisable et testez-le sur vos amis !<br/><br/>
+					🎨 Faites preuve de créativité et créez des défis uniques !`;
 				break;
+	
 			default:
 				infoText.innerHTML = '';
 				break;
 		}
 	};
+	
 
 	const clearDynamicButtons = () => {
 		dynamicButtons.innerHTML = '';
