@@ -18,10 +18,22 @@ export const initCreationMode = (dynamicButtons) => {
     });
 
     addDynamicButton(dynamicButtons, 'Réinitialiser le graphe', 'reset-graph-btn', () => {
-        if (confirm('Voulez-vous vraiment réinitialiser le graphe ?')) {
-            cyCustom.elements().remove();
-            firstNode = null;
-        }
+        Swal.fire({
+            title: "Confirmer la suppression",
+            text: `Voulez-vous vraiment rénitialiser le graphe ?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Annuler",
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                cyCustom.elements().remove();
+                firstNode = null;
+                Swal.fire("Graphe réinitialisé !", "", "success");
+            }
+        });
     });
 
     addDynamicButton(dynamicButtons, 'Essayer le graphe', 'try-graph-btn', () => {
@@ -66,14 +78,28 @@ export const initCreationMode = (dynamicButtons) => {
         }
     });
 
-    cyCustom.on('cxttap', 'node, edge', (evt) => {
-        const target = evt.target;
-        if (confirm(`Voulez-vous vraiment supprimer cet élément (${target.isNode() ? 'sommet' : 'arête'}) ?`)) {
-            target.remove();
-        }
-    });
+    document.addEventListener("contextmenu", (event) => event.preventDefault());
 
     cyCustom.container().addEventListener('contextmenu', (evt) => evt.preventDefault());
+
+    cyCustom.on('cxttap', 'node, edge', (evt) => {
+        const target = evt.target;
+        Swal.fire({
+            title: "Confirmer la suppression",
+            text: `Voulez-vous vraiment supprimer ${target.isNode() ? 'ce sommet' : 'cette arête'} ?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Annuler",
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                target.remove();
+                Swal.fire("Supprimé!", "L'élément a été supprimé.", "success");
+            }
+        });
+    });
 
     function highlightNode(node) {
         node.style('border-color', '#FFD700');

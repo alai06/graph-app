@@ -292,11 +292,23 @@ addNodeBtn.addEventListener('click', () => {
 });
 
 resetGraphBtn.addEventListener('click', () => {
-	if (confirm('Voulez-vous vraiment réinitialiser le graphe ?')) {
-		cy.elements().remove();
-		resetNodeSelection();
-		validateOptimalColoring();
-	}
+	Swal.fire({
+        title: "Confirmer la suppression",
+        text: `Voulez-vous vraiment supprimer le graphe ?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Oui, supprimer",
+        cancelButtonText: "Annuler",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+    }).then((result) => {
+        if (result.isConfirmed) {
+			cy.elements().remove();
+			resetNodeSelection();
+			validateOptimalColoring();
+            Swal.fire("Supprimé !", "Le graphe a été supprimé.", "success");
+        }
+    });
 });
 
 saveGraphBtn.addEventListener('click', async () => {
@@ -392,10 +404,22 @@ const handleNodeClick = (node) => {
 };
 
 const handleElementContextMenu = (element) => {
-	if (confirm(`Voulez-vous supprimer cet élément (${element.isNode() ? 'sommet' : 'arête'}) ?`)) {
-		element.remove();
-		resetNodeSelection();
-	}
+    Swal.fire({
+        title: "Confirmer la suppression",
+        text: `Voulez-vous vraiment supprimer ${element.isNode() ? 'ce sommet' : 'cette arête'} ?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Oui, supprimer",
+        cancelButtonText: "Annuler",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            element.remove();
+            resetNodeSelection();
+            Swal.fire("Supprimé!", "L'élément a été supprimé.", "success");
+        }
+    });
 };
 
 const resetNodeSelection = () => {

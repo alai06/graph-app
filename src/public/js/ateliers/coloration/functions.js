@@ -134,9 +134,22 @@ export const addEdge = () => {
 };
 
 export const resetGraph = () => {
-    if (confirm("Voulez-vous vraiment réinitialiser le graphe ?")) {
-        cy.elements().remove();
-    }
+    Swal.fire({
+        title: "Confirmer la suppression",
+        text: `Voulez-vous vraiment rénitialiser le graphe ?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Oui, supprimer",
+        cancelButtonText: "Annuler",
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            element.remove();
+            resetNodeSelection();
+            Swal.fire("Graphe réinitialisé !", "", "success");
+        }
+    });
 };
 
 export const resetColorsLibre = () => {

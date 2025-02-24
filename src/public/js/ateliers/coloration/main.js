@@ -31,47 +31,91 @@ document.addEventListener('DOMContentLoaded', () => {
 		switch (mode) {
 			case 'Défi':
 				infoText.innerHTML = `
-					<strong>🎯 Objectif :</strong><br/>
-					- Assurez-vous que <strong>deux sommets adjacents</strong> n'ont jamais la même couleur !<br/>
-					- Vous disposez d’un <strong>nombre limité</strong> de pastilles colorées. Saurez-vous les placer intelligemment ?<br/><br/>
-					<strong>🛠️ Comment jouer ?</strong><br/>
-					1️⃣ Choisissez un graphe prédéfini.<br/>
-					2️⃣ Appliquez vos couleurs en respectant les règles.<br/>
-					3️⃣ Lorsque vous êtes sûr de votre solution, cliquez sur <strong>"Valider la coloration"</strong> pour voir si vous avez réussi !<br/><br/>
-					⚠️ Attention, chaque mouvement compte !`;
+					<h3>🎯 Objectif</h3>
+					<ul>
+						<li>Deux sommets adjacents ne doivent jamais avoir la même couleur.</li>
+						<li>Vous possédez un nombre limité de pastilles que vous devez placer correctement.</li>
+					</ul>
+
+					<h3>🛠️ Comment jouer à la <strong>Coloration d'un Graphe</strong></h3>
+					<ul>
+						<li>Sélectionne un graphe prédéfini dans le menu déroulant.</li>
+						<li>Clique sur le bouton <strong>Charger le Graphe</strong> pour charger le graphe.</li>
+						<li>Seul les pastilles de couleur (🔴) peuvent être déplacées jusqu'aux sommets.</li>
+						<li>Attrape une pastille de couleur, fais la glisser vers un sommet et relâche là pour lui attribuer cette couleur.</li>
+						<li>Colorie entiérement le graphe en respectant les règles de coloration.</li>
+						<li>Quand tu penses avoir réussi, clique sur le bouton <strong>Valider la Coloration</strong> pour vérifier si le graphe est correctement coloré.</li>
+					</ul>
+
+					<h3>🔧 Fonctionnalités</h3>
+					<ul>
+						<li>Si tu penses avoir fait une erreur, tu peux faire un clic droit sur un sommet pour lui retirer sa couleur.</li>
+						<li>Si tu veux recommencer, clique sur <strong>Réinitialiser la Coloration</strong> pour remettre tous les sommets dans leur état initial.</li>
+					</ul>`;
 				break;
-	
+
 			case 'Libre':
 				infoText.innerHTML = `
-					<strong>🎯 Objectif :</strong><br/>
-					- Coloriez le graphe en respectant la règle d'or : <strong>deux sommets reliés ne doivent jamais partager la même couleur</strong> !<br/>
-					- Cette fois, vous avez un <strong>nombre illimité</strong> de pastilles, mais essayez de minimiser leur utilisation !<br/>
-					- Peut-être avez-vous trouvé une solution... mais est-ce la plus optimale ?<br/><br/>
-					<strong>🛠️ Comment jouer ?</strong><br/>
-					1️⃣ Sélectionnez un graphe prédéfini.<br/>
-					2️⃣ Testez différentes combinaisons de couleurs.<br/>
-					3️⃣ Lorsque vous êtes satisfait, cliquez sur <strong>"Valider la coloration"</strong> et vérifiez si vous pouvez encore améliorer votre solution !<br/><br/>
-					💡 Conseil : Une solution parfaite utilise <strong>le moins de couleurs possible</strong>. À vous de jouer !`;
+					<h3>🎯 Objectif</h3>
+					<ul>
+						<li>Deux sommets adjacents ne doivent jamais avoir la même couleur.</li>
+						<li>Vous possédez un nombre limité de pastilles que vous devez placer correctement.</li>
+					</ul>
+
+					<h3>🛠️ Comment jouer à la <strong>Coloration d'un Graphe</strong></h3>
+					<ul>
+						<li>Sélectionne un graphe prédéfini dans le menu déroulant.</li>
+						<li>Clique sur le bouton <strong>Charger le Graphe</strong> pour charger le graphe.</li>
+						<li>Seul les pastilles de couleur (🔴) peuvent être déplacées jusqu'aux sommets.</li>
+						<li>Attrape une pastille de couleur, fais la glisser vers un sommet et relâche là pour lui attribuer cette couleur.</li>
+						<li>Colorie entiérement le graphe en respectant les règles de coloration.</li>
+						<li>Quand tu penses avoir réussi, clique sur le bouton <strong>Valider la Coloration</strong> pour vérifier si le graphe est correctement coloré.</li>
+						<li>Mets toi au défi d'utiliser le moins de couleurs possible pour colorier le graphe !</li>
+					</ul>
+
+					<h3>🔧 Fonctionnalités</h3>
+					<ul>
+						<li>Si tu penses avoir fait une erreur, tu peux faire un clic droit sur un sommet pour lui retirer sa couleur.</li>
+						<li>Si tu veux recommencer, clique sur <strong>Réinitialiser la Coloration</strong> pour remettre tous les sommets dans leur état initial.</li>
+					</ul>`;
 				break;
-	
+
 			case 'Création':
 				infoText.innerHTML = `
-					<strong>🎯 Objectif :</strong><br/>
-					- Créez votre propre graphe et testez sa difficulté !<br/>
-					- Rappelez-vous : <strong>deux sommets adjacents ne doivent jamais partager la même couleur</strong> !<br/><br/>
-					<strong>🛠️ Comment jouer ?</strong><br/>
-					1️⃣ Ajoutez des sommets et reliez-les avec des arêtes pour façonner votre graphe.<br/>
-					2️⃣ Passez en <strong>Mode Libre</strong> pour essayer de le colorer.<br/>
-					3️⃣ Vérifiez si votre graphe est réalisable et testez-le sur vos amis !<br/><br/>
-					🎨 Faites preuve de créativité et créez des défis uniques !`;
+					<h3>🎯 Objectif</h3>
+					<ul>
+						<li>Créer un graphe et le colorier.</li>
+						<li>Deux sommets adjacents ne doivent jamais avoir la même couleur.</li>
+						<li>Vous possédez un nombre limité de pastilles que vous devez placer correctement.</li>
+					</ul>
+
+					<h3>🛠️ Comment jouer à la <strong>Création et la Coloration d'un Graphe</strong></h3>
+					<ul>
+						<li>Clique sur le bouton <strong>Ajouter un sommet.</strong> pour ajouter un sommet au graphe.</li>
+						<li>Place le sommet en le faisant glisser là où tu veux.</li>
+						<li>En faisant un clic gauche sur un sommet puis un autre clic gauche sur un autre sommet, tu peux ajouter une arête entre les deux sommets.</li>
+						<li>Dès que tu penses avoir fini de créer ton graphe, clique sur le bouton <strong>Essayer le Graphe</strong> pour commencer à colorier le graphe.</li>
+						<li>Seul les pastilles de couleur (🔴) peuvent être déplacées jusqu'aux sommets.</li>
+						<li>Attrape une pastille de couleur, fais la glisser vers un sommet et relâche là pour lui attribuer cette couleur.</li>
+						<li>Colorie entiérement le graphe en respectant les règles de coloration.</li>
+						<li>Quand tu penses avoir réussi, clique sur le bouton <strong>Valider la Coloration</strong> pour vérifier si le graphe est correctement coloré.</li>
+						<li>Mets toi au défi d'utiliser le moins de couleurs possible pour colorier le graphe !</li>
+					</ul>
+					
+					<h3>🔧 Fonctionnalités</h3>
+					<ul>
+						<li>Lors de la création, si tu penses que ton graphe est pas beau, tu peux le réarranger en cliquant sur <strong>Réarranger le graphe</strong>.</li>
+						<li>Si tu penses avoir fait une erreur, tu peux faire un clic droit sur un sommet pour lui retirer sa couleur.</li>
+						<li>Si tu veux recommencer, clique sur <strong>Réinitialiser la Coloration</strong> pour remettre tous les sommets dans leur état initial.</li>
+					</ul>`;
 				break;
-	
+
 			default:
 				infoText.innerHTML = '';
 				break;
 		}
 	};
-	
+
 
 	const clearDynamicButtons = () => {
 		dynamicButtons.innerHTML = '';
