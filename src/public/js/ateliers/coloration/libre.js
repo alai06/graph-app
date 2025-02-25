@@ -201,13 +201,13 @@ function validateGraphLibre(cy, optimalColorCount) {
             Swal.fire({
                 icon: "success",
                 title: "Félicitations !",
-                text: "La coloration est valide mais elle n'est pas optimale, vous pouvez utiliser moins de couleur.",
+                text: "Bravo, la coloration est valide, êtes-vous sûr que vous ne pouvez pas utiliser moins de couleurs ?",
             });
         }else{
             Swal.fire({
                 icon: "success",
                 title: "Félicitations !",
-                text: "La coloration est valide et optimale, vous avez utilisé le minimum de couleur.",
+                text: "Bravo, la coloration est valide, vous avez utilisé le moins de couleurs possible.",
             });
         }
     }

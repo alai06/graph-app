@@ -1,4 +1,4 @@
-import { initGraph, validateGraph, resetColorsLibre, generateRandomColors } from './functions.js';
+import { initGraph, validateGraph, resetColorsLibre, generateRandomColors, isGraphConnected } from './functions.js';
 import { addDynamicButton } from '../../functions.js';
 
 export const initCreationMode = (dynamicButtons) => {
@@ -37,8 +37,30 @@ export const initCreationMode = (dynamicButtons) => {
     });
 
     addDynamicButton(dynamicButtons, 'Essayer le graphe', 'try-graph-btn', () => {
+        if (!isGraphConnected(cyCustom)) {
+            Swal.fire({
+                title: "Sommets non reliés",
+                text: "Tous les sommets doivent être reliés par des arêtes avant d'essayer le graphe.",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+            return;
+        }
+
+        const colorsNumber = generateRandomColors(cyCustom);
+    
+        if (colorsNumber.length > 12) {
+            Swal.fire({
+                title: "Trop de couleurs nécessaires",
+                text: "Le graphe nécessite plus de 12 couleurs, ce qui dépasse la limite autorisée.",
+                icon: "error",
+                confirmButtonText: "OK"
+            });
+            return;
+        }
+        
         switchToLibreMode(cyCustom.json(), dynamicButtons);
-    });
+    });    
 
     addDynamicButton(dynamicButtons, 'Réarranger le graphe', 'rearrange-graph-btn', () => {
         const layoutOptions = {
@@ -127,6 +149,7 @@ export const initCreationMode = (dynamicButtons) => {
         addDynamicButton(dynamicButtons, 'Réinitialiser la Coloration', 'reset-colors-btn', () => resetColorsLibre(cyLibre));
     
         const colorsConfig = generateRandomColors(cyLibre);
+        console.log(colorsConfig);
         addInfiniteColorTokens(colorsConfig, cyLibre);
     
         let draggedColor = null;

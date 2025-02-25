@@ -1,13 +1,16 @@
+import { colors } from "../../functions.js";
+
 let cy;
 
 export const initGraph = (containerId, options = {}) => {
     cy = cytoscape({
         container: document.getElementById(containerId),
         elements: [],
-        style: [
-            { selector: 'node', style: { 'background-color': '#cccccc' } },
-            { selector: 'edge', style: { 'line-color': '#666', 'width': 2 } }
-        ],
+		style: [
+			{ selector: 'node', style: { 'background-color': '#cccccc', label: 'data(label)' } },
+			{ selector: 'edge.default', style: { 'line-color': '#666', 'width': 2 } },
+			{ selector: 'edge.bezier', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': 50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } }
+		],
         layout: { name: 'grid' },
         ...options
     });
@@ -228,8 +231,6 @@ export const generateRandomColors = (cy) => {
 
     const numColors = Math.max(deltaMax + 1, Math.round((numNodes + (deltaMax + 1)) / 2));
 
-    const colors = ['#FF5733', '#3498DB', '#2ECC71', '#F1C40F', '#9400D3', '#2A233E', '#34495E', '#00FFFF', '#1A182D'];
-
     const selectedColors = colors.slice(0, Math.min(numColors, colors.length));
 
     return selectedColors.map((color) => ({
@@ -345,4 +346,25 @@ export const populateGraphSelect = async () => {
             text: "Impossible de charger les graphes. Veuillez réessayer.",
         });
     }
+};
+
+export const isGraphConnected = (cy) => {
+    if (cy.nodes().length === 0) return false; // Pas de sommets => non connecté
+
+    let visited = new Set();
+    let stack = [cy.nodes()[0]]; // Démarre avec un sommet quelconque
+    while (stack.length > 0) {
+        let node = stack.pop();
+        if (!visited.has(node.id())) {
+            visited.add(node.id());
+            let neighbors = node.neighborhood('node'); // Récupère les voisins
+            neighbors.forEach(n => {
+                if (!visited.has(n.id())) {
+                    stack.push(n);
+                }
+            });
+        }
+    }
+
+    return visited.size === cy.nodes().length; // Tous les sommets ont été visités ?
 };
