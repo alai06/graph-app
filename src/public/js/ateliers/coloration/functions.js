@@ -1,4 +1,4 @@
-import { colors } from "../../functions.js";
+import { colors } from "../../constants.js";
 
 let cy;
 

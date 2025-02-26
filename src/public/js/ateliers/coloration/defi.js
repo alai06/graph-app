@@ -1,8 +1,8 @@
 import { initGraph, loadPredefinedGraph, validateGraph, resetColorsDefi, populateGraphSelect, rgbToHex } from './functions.js';
 import { addDynamicButton } from '../../functions.js';
 
-export const initDefiMode = (dynamicButtons) => {
-    const cyDefi = initGraph('cy-predefined', { zoomingEnabled: false, panningEnabled: false });
+export const initDefiMode = () => {
+    const cyDefi = initGraph('cy-predefined', { zoomingEnabled: false, panningEnabled: false, boxSelectionEnabled: false });
 
     let draggedColor = null;
     let closestNode = null;
@@ -12,7 +12,7 @@ export const initDefiMode = (dynamicButtons) => {
 
     populateGraphSelect()
 
-    addDynamicButton(dynamicButtons, 'Charger le Graphe', 'load-graph-btn', async () => {
+    addDynamicButton('Charger le Graphe', 'load-graph-btn', async () => {
         try {
             const graphId = document.querySelector('#predefined-graph-select').value;
             const graphData = await loadPredefinedGraph(graphId);
@@ -51,8 +51,8 @@ export const initDefiMode = (dynamicButtons) => {
         }
     });
 
-    addDynamicButton(dynamicButtons, 'Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyDefi, difficulty));
-    addDynamicButton(dynamicButtons, 'Réinitialiser la Coloration', 'reset-colors-btn', resetColorsDefi);
+    addDynamicButton('Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyDefi, difficulty));
+    addDynamicButton('Réinitialiser la Coloration', 'reset-colors-btn', resetColorsDefi);
 
     function addDynamicColorTokens(pastilleCounts, cy) {
         let currentXPosition = 50;

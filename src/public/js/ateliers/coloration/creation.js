@@ -1,14 +1,14 @@
 import { initGraph, validateGraph, resetColorsLibre, generateRandomColors, isGraphConnected } from './functions.js';
-import { addDynamicButton } from '../../functions.js';
+import { addDynamicButton, clearDynamicButtons } from '../../functions.js';
 
-export const initCreationMode = (dynamicButtons) => {
+export const initCreationMode = () => {
     
-    const cyCustom = initGraph('cy-predefined', { zoomingEnabled: false, panningEnabled: false });
+    const cyCustom = initGraph('cy-predefined', { zoomingEnabled: false, panningEnabled: false, boxSelectionEnabled: false });
     const defaultColor = '#cccccc';
 
     let firstNode = null;
 
-    addDynamicButton(dynamicButtons, 'Ajouter un sommet', 'add-node-btn', () => {
+    addDynamicButton('Ajouter un sommet', 'add-node-btn', () => {
         const id = `n${cyCustom.nodes().length + 1}`;
         cyCustom.add({
             group: 'nodes',
@@ -17,7 +17,7 @@ export const initCreationMode = (dynamicButtons) => {
         });
     });
 
-    addDynamicButton(dynamicButtons, 'Réinitialiser le graphe', 'reset-graph-btn', () => {
+    addDynamicButton('Réinitialiser le graphe', 'reset-graph-btn', () => {
         Swal.fire({
             title: "Confirmer la suppression",
             text: `Voulez-vous vraiment rénitialiser le graphe ?`,
@@ -36,7 +36,7 @@ export const initCreationMode = (dynamicButtons) => {
         });
     });
 
-    addDynamicButton(dynamicButtons, 'Essayer le graphe', 'try-graph-btn', () => {
+    addDynamicButton('Essayer le graphe', 'try-graph-btn', () => {
         if (!isGraphConnected(cyCustom)) {
             Swal.fire({
                 title: "Sommets non reliés",
@@ -59,10 +59,10 @@ export const initCreationMode = (dynamicButtons) => {
             return;
         }
         
-        switchToLibreMode(cyCustom.json(), dynamicButtons);
+        switchToLibreMode(cyCustom.json());
     });    
 
-    addDynamicButton(dynamicButtons, 'Réarranger le graphe', 'rearrange-graph-btn', () => {
+    addDynamicButton('Réarranger le graphe', 'rearrange-graph-btn', () => {
         const layoutOptions = {
             name: 'circle',
             fit: true,
@@ -133,11 +133,35 @@ export const initCreationMode = (dynamicButtons) => {
         node.style('border-width', '1px');
     }
 
-    function switchToLibreMode(customGraph, dynamicButtons) {
-        dynamicButtons.innerHTML = '';
-        const cyLibre = initGraph('cy-predefined', { zoomingEnabled: false, panningEnabled: false });
+    function switchToLibreMode(customGraph) {
+        clearDynamicButtons();
+        const cyLibre = initGraph('cy-predefined', { zoomingEnabled: false, panningEnabled: false, boxSelectionEnabled: false });
     
         cyLibre.json(customGraph);
+
+        const minY = Math.min(...cyLibre.nodes().map(node => node.position('y')));
+        const maxY = Math.max(...cyLibre.nodes().map(node => node.position('y')));
+        const minSafeY = 120;
+        const container = document.getElementById('cy-predefined');
+    
+        let offsetY = 0;
+    
+        if (minY < minSafeY) {
+            offsetY = minSafeY - minY;
+        }
+    
+        cyLibre.nodes().forEach(node => {
+            node.position({
+                x: node.position('x'),
+                y: node.position('y') + offsetY
+            });
+        });
+    
+        const grapheHeight = maxY + offsetY + 100;
+    
+        if (grapheHeight > container.clientHeight) {
+            container.style.height = `${grapheHeight}px`;
+        }
     
         cyLibre.nodes().forEach((node) => {
             if (!node.data('isColorNode')) {
@@ -145,8 +169,8 @@ export const initCreationMode = (dynamicButtons) => {
             }
         });
     
-        addDynamicButton(dynamicButtons, 'Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyLibre));
-        addDynamicButton(dynamicButtons, 'Réinitialiser la Coloration', 'reset-colors-btn', () => resetColorsLibre(cyLibre));
+        addDynamicButton('Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyLibre));
+        addDynamicButton('Réinitialiser la Coloration', 'reset-colors-btn', () => resetColorsLibre(cyLibre));
     
         const colorsConfig = generateRandomColors(cyLibre);
         console.log(colorsConfig);
