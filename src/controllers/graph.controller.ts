@@ -4,7 +4,7 @@ import type { Request, Response } from 'express';
 
 export const getGraphs = async (req: Request, res: Response) => {
 	try {
-		const graphs = await GraphModel.find();
+		const graphs = await GraphModel.find().sort({ createdAt: 1 });
 		res.json(graphs);
 	} catch (error: any) {
 		res.status(500).json({ error: error.stack });
