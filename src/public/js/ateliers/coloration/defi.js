@@ -54,6 +54,32 @@ export const initDefiMode = () => {
     addDynamicButton('Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyDefi, difficulty));
     addDynamicButton('Réinitialiser la Coloration', 'reset-colors-btn', resetColorsDefi);
 
+    addDynamicButton("Je penses qu'il est impossible", 'impossible-btn', () => {
+
+        if (difficulty === "Impossible") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Bonne analyse !',
+                html: `
+                    <p>Ce graphe est effectivement impossible à colorier.</p>
+                    <p>
+                        <strong>Justification :</strong>
+                        Imagine que chaque sommet du graphe est une antenne de télécommunication, et que chaque arrête représente une connexion entre elles.<br><br>
+                        <strong>Règle importante :</strong> Deux antennes reliées ne peuvent pas utiliser la même fréquence pour éviter les interférences.<br><br>
+                        Mais ici, il y a trop de connexions et pas assez de fréquences (couleurs). 
+                        Cela signifie qu'à un moment, une antenne devra utiliser une fréquence déjà prise par une voisine, ce qui cause une interférence et rend le réseau inutilisable.<br><br>
+                        C'est pour ça que ce graphe est impossible à colorier.
+                    </p>`,
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: "Non, ce graphe n'est pas impossible.",
+                text: "Ce graphe peut être colorié correctement. Essayez encore !",
+            });
+        }
+    });
+
     function addDynamicColorTokens(pastilleCounts, cy) {
         let currentXPosition = 50;
 

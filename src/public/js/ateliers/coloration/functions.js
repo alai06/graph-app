@@ -318,7 +318,11 @@ export const populateGraphSelect = async () => {
 
         graphs.forEach(graph => {
             if (groupedGraphs[graph.difficulty]) {
-                groupedGraphs[graph.difficulty].push(graph);
+                if(graph.difficulty === "Impossible") {
+                    groupedGraphs["Difficile"].push(graph);
+                } else {
+                    groupedGraphs[graph.difficulty].push(graph);
+                };
             }
         });
 
