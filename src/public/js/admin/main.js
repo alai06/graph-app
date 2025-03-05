@@ -227,7 +227,8 @@ const initializeCytoscape = (data = []) => {
 		style: [
 			{ selector: 'node', style: { 'background-color': '#cccccc', label: 'data(label)' } },
 			{ selector: 'edge.default', style: { 'line-color': '#666', 'width': 2 } },
-			{ selector: 'edge.bezier', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': 50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } }
+			{ selector: 'edge.bezier-left', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': 50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } },
+			{ selector: 'edge.bezier-right', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': -50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } }
 		],
 		layout: { name: 'grid' },
 	});
@@ -269,14 +270,33 @@ const handleEdgeCurve = (event) => {
                         source: selectedNodeCurve.id(),
                         target: hoveredNode.id(),
                     },
-                    classes: 'bezier',
+                    classes: 'bezier-left',
                 });
 
                 unhighlightNode(selectedNodeCurve);
                 selectedNodeCurve = null;
             }
         }
-    }
+    }else if (event.key.toLowerCase() === 'v') {
+		if (hoveredNode) {
+			if (!selectedNodeCurve) {
+				selectedNodeCurve = hoveredNode;
+				highlightNode(selectedNodeCurve);
+			} else if (selectedNodeCurve !== hoveredNode) {
+				cy.add({
+					group: 'edges',
+					data: {
+						source: selectedNodeCurve.id(),
+						target: hoveredNode.id(),
+					},
+					classes: 'bezier-right',
+				});
+
+				unhighlightNode(selectedNodeCurve);
+				selectedNodeCurve = null;
+			}
+		}
+	}
 };
 
 addNodeBtn.addEventListener('click', () => {

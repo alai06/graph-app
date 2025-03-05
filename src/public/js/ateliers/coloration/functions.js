@@ -9,7 +9,8 @@ export const initGraph = (containerId, options = {}) => {
 		style: [
 			{ selector: 'node', style: { 'background-color': '#cccccc', label: 'data(label)' } },
 			{ selector: 'edge.default', style: { 'line-color': '#666', 'width': 2 } },
-			{ selector: 'edge.bezier', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': 50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } }
+			{ selector: 'edge.bezier-left', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': 50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } },
+            { selector: 'edge.bezier-right', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': -50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } }
 		],
         layout: { name: 'grid' },
         ...options

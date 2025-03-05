@@ -9,6 +9,7 @@ export const initDefiMode = () => {
     const snapDistance = 50;
     const defaultColor = '#cccccc';
     let difficulty = "";
+    let startTime = Date.now();  // Temps de début du défi
 
     populateGraphSelect()
 
@@ -39,6 +40,8 @@ export const initDefiMode = () => {
                         node.lock();
                     }
                 });
+
+                startTime = Date.now();
             }, 100);
 
         } catch (error) {
@@ -54,23 +57,57 @@ export const initDefiMode = () => {
     addDynamicButton('Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyDefi, difficulty));
     addDynamicButton('Réinitialiser la Coloration', 'reset-colors-btn', resetColorsDefi);
 
-    addDynamicButton("Je penses qu'il est impossible", 'impossible-btn', () => {
+    function hasColoredNodes(cy) {
+        return cy.nodes().some(node => {
+            return !node.data('isColorNode') && rgbToHex(node.style('background-color')) !== '#cccccc';
+        });
+    }
 
-        if (difficulty === "Impossible") {
+    addDynamicButton("Je pense qu'il est impossible", 'impossible-btn', () => {
+
+        const timeElapsed = (Date.now() - startTime) / 1000;
+        const hasTriedColoring = hasColoredNodes(cyDefi);
+
+        console.log(timeElapsed);
+        console.log(hasTriedColoring);
+
+        if (!hasTriedColoring || timeElapsed < 10) {
+            Swal.fire({
+                icon: 'warning',
+                title: "Attention !",
+                text: "Vous devez essayer de colorier le graphe avant de déclarer qu'il est impossible !",
+            });
+            return;
+        }
+
+        if (difficulty.trim().toLowerCase() === "impossible") {
             Swal.fire({
                 icon: 'success',
                 title: 'Bonne analyse !',
                 html: `
-                    <p>Ce graphe est effectivement impossible à colorier.</p>
+                    <p>✅ Ce graphe est effectivement impossible à colorier.</p>
+                    <hr>
                     <p>
-                        <strong>Justification :</strong>
-                        Imagine que chaque sommet du graphe est une antenne de télécommunication, et que chaque arrête représente une connexion entre elles.<br><br>
-                        <strong>Règle importante :</strong> Deux antennes reliées ne peuvent pas utiliser la même fréquence pour éviter les interférences.<br><br>
-                        Mais ici, il y a trop de connexions et pas assez de fréquences (couleurs). 
-                        Cela signifie qu'à un moment, une antenne devra utiliser une fréquence déjà prise par une voisine, ce qui cause une interférence et rend le réseau inutilisable.<br><br>
-                        C'est pour ça que ce graphe est impossible à colorier.
-                    </p>`,
+                        <strong>Justification :</strong><br>
+                        Imagine que chaque sommet du graphe est une <strong>antenne de télécommunication</strong>, 
+                        et que chaque arête représente une <strong>connexion</strong> entre elles.
+                    </p>
+                    <p>
+                        <strong>📡 Règle importante :</strong><br>
+                        Deux antennes reliées <strong>ne peuvent pas utiliser la même fréquence</strong> 
+                        pour éviter les interférences.
+                    </p>
+                    <p>
+                        ❌ Mais ici, il y a <strong>trop de connexions</strong> et <strong>pas assez de fréquences (couleurs)</strong>. 
+                        Cela signifie qu'à un moment, une antenne devra utiliser une fréquence 
+                        <strong>déjà prise par une voisine</strong>, ce qui cause une interférence et rend le réseau inutilisable.
+                    </p>
+                    <p>
+                        🛑 <strong>C'est pour ça que ce graphe est impossible à colorier.</strong>
+                    </p>
+                `,
             });
+
         } else {
             Swal.fire({
                 icon: 'error',
