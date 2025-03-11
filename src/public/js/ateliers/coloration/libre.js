@@ -9,12 +9,16 @@ export const initLibreMode = () => {
     const snapDistance = 50;
     const defaultColor = '#cccccc';
     let optimalColorCount = null;
+    let difficulty = "";
 
     populateGraphSelect()
 
-    addDynamicButton('Charger le Graphe', 'load-graph-btn', async () => {
+    const predefinedGraphSelect = document.querySelector('#predefined-graph-select');
+
+    predefinedGraphSelect.addEventListener('change', async () => {
+
         try {
-            const graphId = document.querySelector('#predefined-graph-select').value;
+            const graphId = predefinedGraphSelect.value;
             const graphData = await loadPredefinedGraph(graphId);
 
             if (!graphData || !graphData.data) {
@@ -27,11 +31,11 @@ export const initLibreMode = () => {
             }
 
             optimalColorCount = graphData.optimalColoring;
+            difficulty = graphData.difficulty;
 
             setTimeout(() => {
 
-                const colorsConfig = generateRandomColors(cyLibre);
-                addInfiniteColorTokens(colorsConfig, cyLibre);
+                addInfiniteColorTokens(Object.keys(graphData.pastilleCounts), cyLibre);
 
                 cyLibre.nodes().forEach((node) => {
                     if (!node.data('isColorNode')) {
@@ -39,23 +43,28 @@ export const initLibreMode = () => {
                     }
                 });
             }, 100);
-
         } catch (error) {
-            console.error("Erreur lors du chargement du graphe :", error.message);
-        }
+            Swall.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: "Impossible de charger le graphe. Veuillez réessayer.",
+            })
+        };
     });
 
     addDynamicButton('Valider la Coloration', 'validate-graph-btn', () => validateGraphLibre(cyLibre, optimalColorCount));
     addDynamicButton('Réinitialiser la Coloration', 'reset-colors-btn', resetColorsLibre);
 
-    function addInfiniteColorTokens(colorsConfig, cy) {
+    function addInfiniteColorTokens(pastilleCounts, cy) {
         let currentXPosition = 50;
 
-        colorsConfig.forEach(({ color, count }) => {
+        if (difficulty.trim().toLowerCase() === "impossible") {
+            pastilleCounts.push("#90435F");
+        }
 
-            count = 1;
+        pastilleCounts.forEach((color) => {
 
-            for (let i = 0; i < count; i++) {
+            for (let i = 0; i < 1; i++) {
                 createColorToken(color, currentXPosition, 50, cy);
                 currentXPosition += 50;
             }
@@ -203,7 +212,7 @@ function validateGraphLibre(cy, optimalColorCount) {
                 title: "Félicitations !",
                 text: "Bravo, la coloration est valide, êtes-vous sûr que vous ne pouvez pas utiliser moins de couleurs ?",
             });
-        }else{
+        } else {
             Swal.fire({
                 icon: "success",
                 title: "Félicitations !",

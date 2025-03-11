@@ -9,13 +9,16 @@ export const initDefiMode = () => {
     const snapDistance = 50;
     const defaultColor = '#cccccc';
     let difficulty = "";
-    let startTime = Date.now();  // Temps de début du défi
+    let startTime = Date.now();
 
-    populateGraphSelect()
+    populateGraphSelect();
 
-    addDynamicButton('Charger le Graphe', 'load-graph-btn', async () => {
+    const predefinedGraphSelect = document.querySelector('#predefined-graph-select');
+
+    predefinedGraphSelect.addEventListener('change', async () => {
+
         try {
-            const graphId = document.querySelector('#predefined-graph-select').value;
+            const graphId = predefinedGraphSelect.value;
             const graphData = await loadPredefinedGraph(graphId);
 
             if (!graphData || !graphData.data) {
@@ -28,12 +31,9 @@ export const initDefiMode = () => {
             }
 
             setTimeout(async () => {
-
-                const pastilleCounts = graphData.pastilleCounts;
-
                 difficulty = graphData.difficulty;
 
-                addDynamicColorTokens(pastilleCounts, cyDefi);
+                addDynamicColorTokens(graphData.pastilleCounts, cyDefi);
 
                 cyDefi.nodes().forEach((node) => {
                     if (!node.data('isColorNode')) {
@@ -42,8 +42,8 @@ export const initDefiMode = () => {
                 });
 
                 startTime = Date.now();
-            }, 100);
 
+            }, 100);
         } catch (error) {
             console.error("Erreur lors du chargement du graphe :", error.message);
             Swal.fire({
@@ -67,9 +67,6 @@ export const initDefiMode = () => {
 
         const timeElapsed = (Date.now() - startTime) / 1000;
         const hasTriedColoring = hasColoredNodes(cyDefi);
-
-        console.log(timeElapsed);
-        console.log(hasTriedColoring);
 
         if (!hasTriedColoring || timeElapsed < 10) {
             Swal.fire({
