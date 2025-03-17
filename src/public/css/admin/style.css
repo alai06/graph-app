@@ -249,3 +249,69 @@ h2 {
 .admin-buttons button:active {
     background-color: #004494;
 }
+
+/* Conteneur du slider */
+#edge-slider-container {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 5%; /* Positionner le slider à gauche */
+    transform: translateX(0); /* Supprimer le centrage par défaut */
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Style du texte du slider */
+#edge-slider-label {
+    display: block;
+    margin-bottom: 5px;
+    color: black;
+    font-size: 14px;
+}
+
+/* Style du slider */
+#edge-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 200px;
+    height: 6px;
+    background: var(--grey);
+    outline: none;
+    opacity: 0.9;
+    border-radius: 5px;
+    transition: opacity 0.2s;
+}
+
+/* Curseur du slider */
+#edge-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--blue);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#edge-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: var(--blue);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Effet hover */
+#edge-slider:hover {
+    opacity: 1;
+}
+
+/* Animation du curseur au hover */
+#edge-slider::-webkit-slider-thumb:hover,
+#edge-slider::-moz-range-thumb:hover {
+    background: var(--blueHover);
+}

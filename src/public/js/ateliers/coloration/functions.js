@@ -6,12 +6,19 @@ export const initGraph = (containerId, options = {}) => {
     cy = cytoscape({
         container: document.getElementById(containerId),
         elements: [],
-		style: [
-			{ selector: 'node', style: { 'background-color': '#cccccc', label: 'data(label)' } },
-			{ selector: 'edge.default', style: { 'line-color': '#666', 'width': 2 } },
-			{ selector: 'edge.bezier-left', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': 50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } },
-            { selector: 'edge.bezier-right', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': -50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } }
-		],
+        style: [
+            { selector: 'node', style: { 'background-color': '#cccccc', label: 'data(label)' } },
+            { 
+                selector: 'edge', 
+                style: {
+                    'line-color': '#666',
+                    'width': 2,
+                    'curve-style': 'unbundled-bezier',
+                    'control-point-distance': 'data(controlPointDistance)', // Utilisation directe
+                    'control-point-weight': 0.5
+                }
+            }
+        ],
         layout: { name: 'grid' },
         ...options
     });
@@ -25,9 +32,6 @@ export const rgbToHex = (rgb) => {
 }
 
 export const validateGraph = (cyInstance, difficulty) => {
-
-    console.log(cyInstance);
-    console.log(difficulty);
 
     const defaultColor = '#cccccc';
     let isCompleted = true;
@@ -80,7 +84,7 @@ export const validateGraph = (cyInstance, difficulty) => {
 
 export const loadPredefinedGraph = async (graphId) => {
     cy.elements().remove();
-
+    
     try {
         const response = await fetch(`/api/graph/${graphId}`);
         if (!response.ok) {
@@ -88,10 +92,15 @@ export const loadPredefinedGraph = async (graphId) => {
         }
 
         const graphConfig = await response.json();
+        console.log(graphConfig);
         if (graphConfig?.data) {
 
             graphConfig.data.nodes.forEach(node => {
                 node.position.y += 80;
+            });
+
+            graphConfig.data.edges.forEach(edge => {
+                edge.data.controlPointDistance = edge.data.controlPointDistance ?? 0;
             });
 
             cy.add(graphConfig.data);

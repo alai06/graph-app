@@ -26,6 +26,7 @@ export const addGraph = async (req: Request, res: Response) => {
 		await graph.save();
 		res.status(201).json(graph);
 	} catch (error: any) {
+		console.log(error);
 		res.status(500).json({ error: error.stack });
 	}
 };

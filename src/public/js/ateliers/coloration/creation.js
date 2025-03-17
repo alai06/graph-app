@@ -82,7 +82,7 @@ export const initCreationMode = () => {
             if (clickedNode !== firstNode) {
                 cyCustom.add({
                     group: 'edges',
-                    data: { source: firstNode.id(), target: clickedNode.id() },
+                    data: { source: firstNode.id(), target: clickedNode.id(), controlPointDistance: 0 },
                 });
             }
 
@@ -173,7 +173,6 @@ export const initCreationMode = () => {
         addDynamicButton('Réinitialiser la Coloration', 'reset-colors-btn', () => resetColorsLibre(cyLibre));
     
         const colorsConfig = generateRandomColors(cyLibre);
-        console.log(colorsConfig);
         addInfiniteColorTokens(colorsConfig, cyLibre);
     
         let draggedColor = null;

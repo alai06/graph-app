@@ -28,7 +28,7 @@ export const addGraph = async (graphPayload) => {
 		});
 
 		if (!response.ok) {
-			throw new Error('Error adding graph');
+			throw new Error(response.statusText);
 		}
 
 		return response.json();
