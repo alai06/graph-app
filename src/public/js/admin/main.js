@@ -12,6 +12,8 @@ const optimalColoringInput = document.querySelector('#graph-optimal-coloring');
 const confirmDeleteBtn = document.querySelector('#confirm-delete-btn');
 const addNodeBtn = document.querySelector('#add-node-btn');
 const resetGraphBtn = document.querySelector('#reset-graph-btn');
+const edgeSliderContainer = document.getElementById('edge-slider-container');
+const edgeSlider = document.getElementById('edge-slider');
 
 const colorInputsContainer = document.getElementById('color-inputs');
 const colorConfigContainer = document.getElementById('color-config');
@@ -31,7 +33,7 @@ Object.keys(reorganizeGraphObject).forEach((key) => {
 let cy;
 let editingGraphId = null;
 let selectedNode = null;
-let manualColorConfig = {};
+let selectedEdge = null;
 
 const handleDisableSaveBtn = () => {
 	const totalNodes = cy.nodes().length;
@@ -226,27 +228,74 @@ const initializeCytoscape = (data = []) => {
 		elements: [],
 		style: [
 			{ selector: 'node', style: { 'background-color': '#cccccc', label: 'data(label)' } },
-			{ selector: 'edge.default', style: { 'line-color': '#666', 'width': 2 } },
-			{ selector: 'edge.bezier-left', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': 50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } },
-			{ selector: 'edge.bezier-right', style: { 'curve-style': 'unbundled-bezier', 'control-point-distance': -50, 'control-point-weight': 0.5, 'line-color': '#666', 'width': 2 } }
+			{
+				selector: 'edge', // Applique à toutes les arêtes
+				style: {
+					'line-color': '#666',
+					'width': 2,
+					'curve-style': 'unbundled-bezier',
+					'control-point-distance': 'data(controlPointDistance)', // Utilisation d'une donnée dynamique
+					'control-point-weight': 0.5
+				}
+			}
 		],
 		layout: { name: 'grid' },
 	});
 
 	if (Object.keys(data).length > 0) {
-		instance.add(data);
+
+		if (data.edges.length > 0) {
+			data.edges.forEach(edge => {
+				edge.data.controlPointDistance = edge.data.controlPointDistance || 0;
+			});
+		}
+
+		instance.add([...data.nodes, ...data.edges]);
 	};
-	
+
 	instance.on('mouseover', 'node', (event) => {
 		hoveredNode = event.target;
 	});
-	
+
 	instance.on('mouseout', 'node', () => {
 		hoveredNode = null;
 	});
 
-	document.addEventListener('keydown', (event) => handleEdgeCurve(event));
 	instance.on('tap', 'node', (event) => handleNodeClick(event.target));
+	instance.on('tap', 'edge', (event) => {
+		selectedEdge = event.target;
+
+		edgeSliderContainer.style.display = 'block';
+
+		const currentDistance = selectedEdge.data('control-point-distance') || 0;
+		edgeSlider.value = currentDistance;
+	});
+
+	instance.on('tap', (event) => {
+
+		if (event.target === instance || instance.panningEnabled() || instance.boxSelectionEnabled()) {
+			return;
+		}
+
+		if (!event.target.isEdge() && !edgeSliderContainer.contains(event.target)) {
+			edgeSliderContainer.style.display = 'none';
+			selectedEdge = null;
+		}
+	});
+
+	edgeSlider.addEventListener('input', (event) => {
+		if (selectedEdge) {
+			const value = parseInt(event.target.value, 10);
+			selectedEdge.style({
+				'curve-style': 'unbundled-bezier',
+				'control-point-distance': value,
+				'control-point-weight': 0.5
+			});
+
+			selectedEdge.data('control-point-distance', value);
+		}
+	});
+
 	instance.on('cxttap', 'node, edge', (event) => handleElementContextMenu(event.target));
 	instance.on('tap', (event) => {
 		if (event.target === instance) {
@@ -255,48 +304,6 @@ const initializeCytoscape = (data = []) => {
 	});
 
 	return instance;
-};
-
-const handleEdgeCurve = (event) => {
-    if (event.key.toLowerCase() === 'c') {
-        if (hoveredNode) {
-            if (!selectedNodeCurve) {
-                selectedNodeCurve = hoveredNode;
-                highlightNode(selectedNodeCurve);
-            } else if (selectedNodeCurve !== hoveredNode) {
-                cy.add({
-                    group: 'edges',
-                    data: {
-                        source: selectedNodeCurve.id(),
-                        target: hoveredNode.id(),
-                    },
-                    classes: 'bezier-left',
-                });
-
-                unhighlightNode(selectedNodeCurve);
-                selectedNodeCurve = null;
-            }
-        }
-    }else if (event.key.toLowerCase() === 'v') {
-		if (hoveredNode) {
-			if (!selectedNodeCurve) {
-				selectedNodeCurve = hoveredNode;
-				highlightNode(selectedNodeCurve);
-			} else if (selectedNodeCurve !== hoveredNode) {
-				cy.add({
-					group: 'edges',
-					data: {
-						source: selectedNodeCurve.id(),
-						target: hoveredNode.id(),
-					},
-					classes: 'bezier-right',
-				});
-
-				unhighlightNode(selectedNodeCurve);
-				selectedNodeCurve = null;
-			}
-		}
-	}
 };
 
 addNodeBtn.addEventListener('click', () => {
@@ -313,66 +320,72 @@ addNodeBtn.addEventListener('click', () => {
 
 resetGraphBtn.addEventListener('click', () => {
 	Swal.fire({
-        title: "Confirmer la suppression",
-        text: `Voulez-vous vraiment supprimer le graphe ?`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Oui, supprimer",
-        cancelButtonText: "Annuler",
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-    }).then((result) => {
-        if (result.isConfirmed) {
+		title: "Confirmer la suppression",
+		text: `Voulez-vous vraiment supprimer le graphe ?`,
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonText: "Oui, supprimer",
+		cancelButtonText: "Annuler",
+		confirmButtonColor: "#d33",
+		cancelButtonColor: "#3085d6",
+	}).then((result) => {
+		if (result.isConfirmed) {
 			cy.elements().remove();
 			resetNodeSelection();
 			validateOptimalColoring();
-            Swal.fire("Supprimé !", "Le graphe a été supprimé.", "success");
-        }
-    });
+			Swal.fire("Supprimé !", "Le graphe a été supprimé.", "success");
+		}
+	});
 });
 
 saveGraphBtn.addEventListener('click', async () => {
+    cy.layout({ name: 'preset', positions: (node) => node.position(), fit: true }).run();
 
-	cy.layout({ name: 'preset', positions: (node) => node.position(), fit: true }).run();
-
-	const name = graphNameInput.value.trim();
-	const difficulty = selectDifficulty.value;
-	const optimalColoring = parseInt(optimalColoringInput.value, 10);
-	const graphData = cy.json().elements;
-
+    const name = graphNameInput.value.trim();
+    const difficulty = selectDifficulty.value;
+    const optimalColoring = parseInt(optimalColoringInput.value, 10);
 	const pastilleCounts = {};
+
 	document.querySelectorAll('#color-inputs input').forEach(input => {
 		pastilleCounts[input.dataset.color] = parseInt(input.value, 10) || 1;
 	});
 
-	const graphPayload = {
-		name,
-		data: { nodes: graphData.nodes, edges: graphData.edges },
-		difficulty,
-		optimalColoring,
+    // Récupération correcte des éléments depuis Cytoscape
+    const cyData = cy.json().elements;
+    const nodes = cyData.nodes || [];
+    const edges = cyData.edges || [];
+
+    // Ajout de `controlPointDistance` en récupérant sa valeur directement dans `edge.data`
+    edges.forEach(edge => {
+        edge.data.controlPointDistance = edge.data['control-point-distance'] ?? 0;
+    });
+
+    const graphPayload = {
+        name,
+        data: { nodes, edges }, 
+        difficulty,
+        optimalColoring,
 		pastilleCounts
-	};
+    };
 
-	let response;
-	if (editingGraphId) {
-		response = await editGraph(editingGraphId, graphPayload);
-	} else {
-		response = await addGraph(graphPayload);
-	}
+    let response;
+    if (editingGraphId) {
+        response = await editGraph(editingGraphId, graphPayload);
+    } else {
+        response = await addGraph(graphPayload);
+    }
 
+    if (response) {
+        Swal.fire({
+            icon: "success",
+            title: "Félicitations !",
+            text: `Graphe ${editingGraphId ? "modifié" : "ajouté"} avec succès !`,
+        });
+    }
 
-	if (response) {
-		Swal.fire({
-			icon: "success",
-			title: "Félicitations !",
-			text: `Graphe ${editingGraphId ? "modifié" : "ajouté"} avec succès !`,
-		});
-	}
-
-	displayGraphs();
-	closeGraphModal();
+    displayGraphs();
+    closeGraphModal();
 });
-
 
 addGraphBtn.addEventListener('click', () => {
 	openGraphModal('Ajouter un Graphe');
@@ -416,30 +429,29 @@ const handleNodeClick = (node) => {
 	} else if (selectedNode !== node) {
 		cy.add({
 			group: 'edges',
-			data: { source: selectedNode.id(), target: node.id() },
-			classes: 'default',
+			data: { source: selectedNode.id(), target: node.id(), controlPointDistance: 0 },
 		});
 		resetNodeSelection();
 	}
 };
 
 const handleElementContextMenu = (element) => {
-    Swal.fire({
-        title: "Confirmer la suppression",
-        text: `Voulez-vous vraiment supprimer ${element.isNode() ? 'ce sommet' : 'cette arête'} ?`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Oui, supprimer",
-        cancelButtonText: "Annuler",
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            element.remove();
-            resetNodeSelection();
-            Swal.fire("Supprimé!", "L'élément a été supprimé.", "success");
-        }
-    });
+	Swal.fire({
+		title: "Confirmer la suppression",
+		text: `Voulez-vous vraiment supprimer ${element.isNode() ? 'ce sommet' : 'cette arête'} ?`,
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonText: "Oui, supprimer",
+		cancelButtonText: "Annuler",
+		confirmButtonColor: "#d33",
+		cancelButtonColor: "#3085d6",
+	}).then((result) => {
+		if (result.isConfirmed) {
+			element.remove();
+			resetNodeSelection();
+			Swal.fire("Supprimé!", "L'élément a été supprimé.", "success");
+		}
+	});
 };
 
 const resetNodeSelection = () => {

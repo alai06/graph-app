@@ -5,6 +5,7 @@ export const initDefiMode = () => {
     const cyDefi = initGraph('cy-predefined', { zoomingEnabled: false, panningEnabled: false, boxSelectionEnabled: false });
 
     let draggedColor = null;
+    let selectedColorNode = null;
     let closestNode = null;
     const snapDistance = 50;
     const defaultColor = '#cccccc';
@@ -143,8 +144,17 @@ export const initDefiMode = () => {
                     },
                     locked: false,
                 });
+
                 currentXPosition += 50;
             }
+        });
+
+        cy.on('tap', 'node[isColorNode]', (evt) => {
+            if (selectedColorNode) {
+                selectedColorNode.style('border-color', '#000'); // Réinitialise la bordure
+            }
+            selectedColorNode = evt.target;
+            selectedColorNode.style('border-color', '#FFD700'); // Highlight la pastille sélectionnée
         });
 
         cy.layout({ name: 'preset' }).run();
@@ -171,6 +181,23 @@ export const initDefiMode = () => {
         console.error("No free position found on X-axis within the limit.");
         return null;
     }
+
+    cyDefi.on('tap', 'node', (evt) => {
+        const node = evt.target;
+        const currentColor = rgbToHex(node.style('background-color'));
+
+        if (!node.data('isColorNode') && selectedColorNode) {
+            const selectedColor = selectedColorNode.style('background-color');
+
+            if (currentColor === defaultColor) {
+                node.style('background-color', selectedColor);
+
+                cyDefi.remove(selectedColorNode);
+
+                selectedColorNode = null;
+            }
+        }
+    });
 
     cyDefi.on('grab', 'node', (evt) => {
         const node = evt.target;
