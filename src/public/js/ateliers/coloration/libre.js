@@ -1,4 +1,4 @@
-import { initGraph, loadPredefinedGraph, resetColorsLibre, populateGraphSelect, generateRandomColors, rgbToHex } from './functions.js';
+import { initGraph, loadPredefinedGraph, resetColorsLibre, populateGraphSelect, rgbToHex } from './functions.js';
 import { addDynamicButton } from '../../functions.js';
 
 export const initLibreMode = () => {
