@@ -1,4 +1,4 @@
-import { initGraph, validateGraph, resetColorsLibre, generateRandomColors, isGraphConnected } from './functions.js';
+import { initGraph, validateGraph, resetColorsLibre, isGraphConnected } from './functions.js';
 import { addDynamicButton, clearDynamicButtons } from '../../functions.js';
 import { colors } from '../../constants.js';
 

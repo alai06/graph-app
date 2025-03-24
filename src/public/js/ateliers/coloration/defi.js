@@ -151,10 +151,10 @@ export const initDefiMode = () => {
 
         cy.on('tap', 'node[isColorNode]', (evt) => {
             if (selectedColorNode) {
-                selectedColorNode.style('border-color', '#000'); // Réinitialise la bordure
+                selectedColorNode.style('border-color', '#000');
             }
             selectedColorNode = evt.target;
-            selectedColorNode.style('border-color', '#FFD700'); // Highlight la pastille sélectionnée
+            selectedColorNode.style('border-color', '#FFD700');
         });
 
         cy.layout({ name: 'preset' }).run();

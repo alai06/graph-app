@@ -218,8 +218,8 @@ const validateOptimalColoring = (event) => {
 	}
 };
 
-let hoveredNode = null; // Stocke le nœud sous la souris
-let selectedNodeCurve = null; // Stocke le premier nœud sélectionné
+let hoveredNode = null;
+let selectedNodeCurve = null;
 
 const initializeCytoscape = (data = []) => {
 
@@ -227,14 +227,14 @@ const initializeCytoscape = (data = []) => {
 		container: document.querySelector('#cy-container'),
 		elements: [],
 		style: [
-			{ selector: 'node', style: { 'background-color': '#cccccc', label: 'data(label)' } },
+			{ selector: 'node', style: { 'background-color': '#cccccc' } },
 			{
-				selector: 'edge', // Applique à toutes les arêtes
+				selector: 'edge',
 				style: {
 					'line-color': '#666',
 					'width': 2,
 					'curve-style': 'unbundled-bezier',
-					'control-point-distance': 'data(controlPointDistance)', // Utilisation d'une donnée dynamique
+					'control-point-distance': 'data(controlPointDistance)',
 					'control-point-weight': 0.5
 				}
 			}
@@ -350,12 +350,10 @@ saveGraphBtn.addEventListener('click', async () => {
 		pastilleCounts[input.dataset.color] = parseInt(input.value, 10) || 1;
 	});
 
-    // Récupération correcte des éléments depuis Cytoscape
     const cyData = cy.json().elements;
     const nodes = cyData.nodes || [];
     const edges = cyData.edges || [];
 
-    // Ajout de `controlPointDistance` en récupérant sa valeur directement dans `edge.data`
     edges.forEach(edge => {
         edge.data.controlPointDistance = edge.data['control-point-distance'] ?? 0;
     });

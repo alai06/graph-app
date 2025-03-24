@@ -7,14 +7,14 @@ export const initGraph = (containerId, options = {}) => {
         container: document.getElementById(containerId),
         elements: [],
         style: [
-            { selector: 'node', style: { 'background-color': '#cccccc', label: 'data(label)' } },
+            { selector: 'node', style: { 'background-color': '#cccccc' } },
             { 
                 selector: 'edge', 
                 style: {
                     'line-color': '#666',
                     'width': 2,
                     'curve-style': 'unbundled-bezier',
-                    'control-point-distance': 'data(controlPointDistance)', // Utilisation directe
+                    'control-point-distance': 'data(controlPointDistance)',
                     'control-point-weight': 0.5
                 }
             }
@@ -190,19 +190,16 @@ export const resetColorsDefi = () => {
         }
     });
 
-    // Supprimer toutes les pastilles existantes
     cy.nodes().filter(node => node.data('isColorNode')).forEach(node => cy.remove(node));
 
     let currentXPosition = 50;
 
-    // Fusionner les pastilles utilisées et inutilisées
     const allColors = { ...colorCounts };
 
     Object.entries(unusedColors).forEach(([color, count]) => {
         allColors[color] = (allColors[color] || 0) + count;
     });
 
-    // Recréer toutes les pastilles à leurs positions
     Object.entries(allColors).forEach(([color, count]) => {
         for (let i = 0; i < count; i++) {
             cy.add({
@@ -363,15 +360,15 @@ export const populateGraphSelect = async () => {
 };
 
 export const isGraphConnected = (cy) => {
-    if (cy.nodes().length === 0) return false; // Pas de sommets => non connecté
+    if (cy.nodes().length === 0) return false;
 
     let visited = new Set();
-    let stack = [cy.nodes()[0]]; // Démarre avec un sommet quelconque
+    let stack = [cy.nodes()[0]];
     while (stack.length > 0) {
         let node = stack.pop();
         if (!visited.has(node.id())) {
             visited.add(node.id());
-            let neighbors = node.neighborhood('node'); // Récupère les voisins
+            let neighbors = node.neighborhood('node');
             neighbors.forEach(n => {
                 if (!visited.has(n.id())) {
                     stack.push(n);
@@ -380,5 +377,5 @@ export const isGraphConnected = (cy) => {
         }
     }
 
-    return visited.size === cy.nodes().length; // Tous les sommets ont été visités ?
+    return visited.size === cy.nodes().length;
 };
