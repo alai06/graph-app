@@ -49,7 +49,7 @@ export const MODE_INFO_TEXTS = {
 			<li>Attrape une pastille de couleur, fais la glisser vers un sommet et relâche là pour lui attribuer cette couleur.</li>
 			<li>Colorie entiérement le graphe en respectant les règles de coloration.</li>
 			<li>Quand tu penses avoir réussi, clique sur le bouton <strong>Valider la Coloration</strong> pour vérifier si le graphe est correctement coloré.</li>
-			<li>Mets toi au défi d'utiliser le moins de couleurs possible pour colorier le graphe !</li>
+			<li>Mets toi au défi d'utiliser le moins de couleurs possible pour colorer le graphe !</li>
 		</ul>
 
 		<h3>🔧 Fonctionnalités</h3>
@@ -60,7 +60,7 @@ export const MODE_INFO_TEXTS = {
     Création: `
         <h3>🎯 Objectif</h3>
         <ul>
-            <li>Créer un graphe et le colorier.</li>
+            <li>Créer un graphe et le colorer.</li>
             <li>Deux sommets adjacents ne doivent jamais avoir la même couleur.</li>
             <li>Vous possédez un nombre limité de pastilles que vous devez placer correctement.</li>
         </ul>
@@ -70,15 +70,15 @@ export const MODE_INFO_TEXTS = {
             <li>Clique sur le bouton <strong>Ajouter un sommet.</strong> pour ajouter un sommet au graphe.</li>
             <li>Place le sommet en le faisant glisser là où tu veux.</li>
             <li>En faisant un clic gauche sur un sommet puis un autre clic gauche sur un autre sommet, tu peux ajouter une arête entre les deux sommets.</li>
-            <li>Dès que tu penses avoir fini de créer ton graphe, clique sur le bouton <strong>Essayer le Graphe</strong> pour commencer à colorier le graphe.</li>
+            <li>Dès que tu penses avoir fini de créer ton graphe, clique sur le bouton <strong>Essayer le Graphe</strong> pour commencer à colorer le graphe.</li>
         </ul>
 
-        <h3>🛠️ Comment jouer à la <strong>la Coloration d'un Graphe</strong></h3>
+        <h3>🛠️ Comment jouer à la <strong>Coloration d'un Graphe</strong></h3>
         <ul>
             <li>Attrape une pastille de couleur, fais la glisser vers un sommet et relâche là pour lui attribuer cette couleur.</li>
             <li>Colorie entiérement le graphe en respectant les règles de coloration.</li>
             <li>Quand tu penses avoir réussi, clique sur le bouton <strong>Valider la Coloration</strong> pour vérifier si le graphe est correctement coloré.</li>
-            <li>Mets toi au défi d'utiliser le moins de couleurs possible pour colorier le graphe !</li>
+            <li>Mets toi au défi d'utiliser le moins de couleurs possible pour colorer le graphe !</li>
         </ul>
         
         <h3>🔧 Fonctionnalités</h3>

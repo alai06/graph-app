@@ -73,7 +73,7 @@ export const initDefiMode = () => {
             Swal.fire({
                 icon: 'warning',
                 title: "Attention !",
-                text: "Vous devez essayer de colorier le graphe avant de déclarer qu'il est impossible !",
+                text: "Vous devez essayer de colorer le graphe avant de déclarer qu'il est impossible !",
             });
             return;
         }
@@ -83,7 +83,7 @@ export const initDefiMode = () => {
                 icon: 'success',
                 title: 'Bonne analyse !',
                 html: `
-                    <p>✅ Ce graphe est effectivement impossible à colorier.</p>
+                    <p>✅ Ce graphe est effectivement impossible à colorer.</p>
                     <hr>
                     <p>
                         <strong>Justification :</strong><br>
@@ -101,7 +101,7 @@ export const initDefiMode = () => {
                         <strong>déjà prise par une voisine</strong>, ce qui cause une interférence et rend le réseau inutilisable.
                     </p>
                     <p>
-                        🛑 <strong>C'est pour ça que ce graphe est impossible à colorier.</strong>
+                        🛑 <strong>C'est pour ça que ce graphe est impossible à colorer.</strong>
                     </p>
                 `,
             });
