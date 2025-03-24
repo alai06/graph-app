@@ -183,7 +183,7 @@ export const initCreationMode = () => {
         let colorsConfig;
         const colorCount = colorCountInput.value ? parseInt(colorCountInput.value, 10) : null;
 
-        if(!colorCount) colorsConfig = colors;
+        if(!colorCount) colorsConfig = colors.splice(0, 12);
         else colorsConfig = colors.slice(0, colorCount);
 
         addInfiniteColorTokens(colorsConfig, cyLibre);
