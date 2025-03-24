@@ -1,5 +1,8 @@
 import { initGraph, validateGraph, resetColorsLibre, generateRandomColors, isGraphConnected } from './functions.js';
 import { addDynamicButton, clearDynamicButtons } from '../../functions.js';
+import { colors } from '../../constants.js';
+
+const colorCountInput = document.getElementById('color-count');
 
 export const initCreationMode = () => {
     
@@ -7,6 +10,23 @@ export const initCreationMode = () => {
     const defaultColor = '#cccccc';
 
     let firstNode = null;
+
+    colorCountInput.addEventListener('input', function () {
+        let value = this.value.trim();
+    
+        if (value === '') {
+            this.value = '';
+            return;
+        }
+    
+        let number = parseInt(value, 10);
+    
+        if (number < 1) {
+            this.value = 1;
+        } else if (number > 12) {
+            this.value = 12;
+        }
+    });
 
     addDynamicButton('Ajouter un sommet', 'add-node-btn', () => {
         const id = `n${cyCustom.nodes().length + 1}`;
@@ -41,18 +61,6 @@ export const initCreationMode = () => {
             Swal.fire({
                 title: "Sommets non reliés",
                 text: "Tous les sommets doivent être reliés par des arêtes avant d'essayer le graphe.",
-                icon: "error",
-                confirmButtonText: "OK"
-            });
-            return;
-        }
-
-        const colorsNumber = generateRandomColors(cyCustom);
-    
-        if (colorsNumber.length > 12) {
-            Swal.fire({
-                title: "Trop de couleurs nécessaires",
-                text: "Le graphe nécessite plus de 12 couleurs, ce qui dépasse la limite autorisée.",
                 icon: "error",
                 confirmButtonText: "OK"
             });
@@ -172,7 +180,12 @@ export const initCreationMode = () => {
         addDynamicButton('Valider la Coloration', 'validate-graph-btn', () => validateGraph(cyLibre));
         addDynamicButton('Réinitialiser la Coloration', 'reset-colors-btn', () => resetColorsLibre(cyLibre));
     
-        const colorsConfig = generateRandomColors(cyLibre);
+        let colorsConfig;
+        const colorCount = colorCountInput.value ? parseInt(colorCountInput.value, 10) : null;
+
+        if(!colorCount) colorsConfig = colors;
+        else colorsConfig = colors.slice(0, colorCount);
+
         addInfiniteColorTokens(colorsConfig, cyLibre);
     
         let draggedColor = null;
@@ -182,7 +195,7 @@ export const initCreationMode = () => {
         function addInfiniteColorTokens(colorsConfig, cy) {
             let currentXPosition = 50;
     
-            colorsConfig.forEach(({ color }) => {
+            colorsConfig.forEach((color) => {
                 createColorToken(color, currentXPosition, 50, cy);
                 currentXPosition += 50;
             });

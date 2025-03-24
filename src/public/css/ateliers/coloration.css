@@ -64,3 +64,49 @@
 #info-section button:hover {
 	background-color: #a71d2a;
 }
+
+#color-config {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    /* border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    width: 25%
+}
+
+#color-config label {
+    font-weight: bold;
+    color: var(--darkBlue);
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+#color-count {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--grey);
+    border-radius: 8px;
+    font-size: 1rem;
+    text-align: center;
+    background-color: #fff;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#color-count:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 4px rgba(0, 116, 217, 0.3);
+}
+
+#color-count::-webkit-inner-spin-button, 
+#color-count::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#color-count:hover {
+    border-color: var(--blueHover);
+}

@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	const infoSection = document.querySelector('#info-section');
 	const infoText = document.querySelector('#info-text');
 
+	const colorConfigInput = document.querySelector('#color-config');
+
 	infoBtn.addEventListener("click", function () {
 		if (infoSection.style.display === "none" || infoSection.style.display === "") {
 			infoSection.style.display = "block";
@@ -49,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		modeTitle.textContent = 'Mode Défi';
 		clearDynamicButtons();
 		selectElement.style.display = 'block';
+		colorConfigInput.style.display = 'none';
 		initDefiMode();
 		displayModeInfo('Défi');
 	});
@@ -58,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		modeTitle.textContent = 'Mode Libre';
 		clearDynamicButtons();
 		selectElement.style.display = 'block';
+		colorConfigInput.style.display = 'none';
 		initLibreMode();
 		displayModeInfo('Libre');
 	});
@@ -67,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		modeTitle.textContent = 'Mode Création';
 		clearDynamicButtons();
 		selectElement.style.display = 'none';
+		colorConfigInput.style.display = 'block';
 		initCreationMode();
 		displayModeInfo('Création');
 	});
