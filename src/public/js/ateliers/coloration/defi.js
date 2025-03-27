@@ -1,5 +1,5 @@
-import { initGraph, loadPredefinedGraph, validateGraph, resetColorsDefi, populateGraphSelect, rgbToHex } from './functions.js';
-import { addDynamicButton } from '../../functions.js';
+import { initGraph, loadPredefinedGraph, validateGraph, resetColorsDefi, rgbToHex } from './functions.js';
+import { addDynamicButton, populateGraphSelect } from '../../functions.js';
 
 export const initDefiMode = () => {
     const cyDefi = initGraph('cy-predefined', { zoomingEnabled: false, panningEnabled: false, boxSelectionEnabled: false });
@@ -73,7 +73,7 @@ export const initDefiMode = () => {
             Swal.fire({
                 icon: 'warning',
                 title: "Attention !",
-                text: "Vous devez essayer de colorier le graphe avant de déclarer qu'il est impossible !",
+                text: "Vous devez essayer de colorer le graphe avant de déclarer qu'il est impossible !",
             });
             return;
         }
@@ -83,7 +83,7 @@ export const initDefiMode = () => {
                 icon: 'success',
                 title: 'Bonne analyse !',
                 html: `
-                    <p>✅ Ce graphe est effectivement impossible à colorier.</p>
+                    <p>✅ Ce graphe est effectivement impossible à colorer.</p>
                     <hr>
                     <p>
                         <strong>Justification :</strong><br>
@@ -101,7 +101,7 @@ export const initDefiMode = () => {
                         <strong>déjà prise par une voisine</strong>, ce qui cause une interférence et rend le réseau inutilisable.
                     </p>
                     <p>
-                        🛑 <strong>C'est pour ça que ce graphe est impossible à colorier.</strong>
+                        🛑 <strong>C'est pour ça que ce graphe est impossible à colorer.</strong>
                     </p>
                 `,
             });
@@ -151,10 +151,10 @@ export const initDefiMode = () => {
 
         cy.on('tap', 'node[isColorNode]', (evt) => {
             if (selectedColorNode) {
-                selectedColorNode.style('border-color', '#000'); // Réinitialise la bordure
+                selectedColorNode.style('border-color', '#000');
             }
             selectedColorNode = evt.target;
-            selectedColorNode.style('border-color', '#FFD700'); // Highlight la pastille sélectionnée
+            selectedColorNode.style('border-color', '#FFD700');
         });
 
         cy.layout({ name: 'preset' }).run();
