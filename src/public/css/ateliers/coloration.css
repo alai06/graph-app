@@ -24,47 +24,6 @@
 	background-color: #f8f8f8;
 }
 
-#info-btn {
-	background-color: #007bff;
-	color: white;
-	border: none;
-	border-radius: 5px;
-	padding: 10px 20px;
-	font-size: 16px;
-	cursor: pointer;
-	transition: background-color 0.3s;
-}
-
-#info-btn:hover {
-	background-color: #0056b3;
-}
-
-#info-section {
-	background-color: #f9f9f9;
-	border-radius: 5px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	padding: 15px;
-	margin-top: 15px;
-}
-
-#info-section h3 {
-	margin-top: 0;
-}
-
-#info-section button {
-	margin-top: 10px;
-	padding: 5px 10px;
-	background-color: #dc3545;
-	color: white;
-	border: none;
-	border-radius: 3px;
-	cursor: pointer;
-}
-
-#info-section button:hover {
-	background-color: #a71d2a;
-}
-
 #color-config {
     display: flex;
     flex-direction: column;

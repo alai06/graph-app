@@ -224,7 +224,6 @@ export const resetColorsDefi = () => {
     cy.layout({ name: 'preset' }).run();
 };
 
-
 export const generateRandomColors = (cy) => {
     const numNodes = cy.nodes().length;
 
@@ -301,62 +300,6 @@ export const generateBalancedColors = (cy, optimalColorCount) => {
         color,
         count
     }));
-};
-
-
-export const populateGraphSelect = async () => {
-    const selectElement = document.getElementById('predefined-graph-select');
-    selectElement.innerHTML = '<option value="" disabled selected>Veuillez sélectionner un graphe</option>';
-
-    try {
-        const response = await fetch('/api/graph');
-        if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des graphes.');
-        }
-
-        const graphs = await response.json();
-
-        const groupedGraphs = {
-            'Facile': [],
-            'Moyen': [],
-            'Difficile': [],
-            'Impossible': []
-        };
-
-        graphs.forEach(graph => {
-            if (groupedGraphs[graph.difficulty]) {
-                if(graph.difficulty === "Impossible") {
-                    groupedGraphs["Difficile"].push(graph);
-                } else {
-                    groupedGraphs[graph.difficulty].push(graph);
-                };
-            }
-        });
-
-        Object.keys(groupedGraphs).forEach(difficulty => {
-            if (groupedGraphs[difficulty].length > 0) {
-
-                const separator = document.createElement('optgroup');
-                separator.label = difficulty;
-                selectElement.appendChild(separator);
-
-                groupedGraphs[difficulty].forEach(graph => {
-                    const option = document.createElement('option');
-                    option.value = graph._id;
-                    option.textContent = graph.name || `Graphe ${graph._id}`;
-                    separator.appendChild(option);
-                });
-            }
-        });
-
-    } catch (error) {
-        console.error(`Erreur : ${error.message}`);
-        Swal.fire({
-            icon: 'error',
-            title: 'Erreur',
-            text: "Impossible de charger les graphes. Veuillez réessayer.",
-        });
-    }
 };
 
 export const isGraphConnected = (cy) => {

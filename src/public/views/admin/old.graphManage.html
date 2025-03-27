@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - GraphManage</title>
+    <script src="/js/admin/main.js" type="module"></script>
+    <link rel="stylesheet" href="/css/admin/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.31.0/dist/cytoscape.min.js"></script>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a href="#" class="logo">Admin Dashboard</a>
+        <nav class="nav-links">
+            <a href="/">Retourner à l'Accueil</a>
+            <a href="#">Déconnexion</a>
+        </nav>
+    </header>
+
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <a href="./index.html">Tableau de bord</a>
+            <a href="./graphManage.html">Gestion des graphes</a>
+            <a href="#">Gestion des utilisateurs</a>
+        </aside>
+
+        <main class="main-content">
+            <h1>Gestion des Graphes</h1>
+            <button id="add-graph-btn" class="button button-success">Ajouter un Graphe</button>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>NOM</th>
+                        <th>DATE CRÉATION</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody id="graphs-list"></tbody>
+            </table>
+    </div>
+
+    <!-- Modal de création / modification -->
+    <div id="graph-modal" class="modal">
+        <div class="modal-content modal-add-update">
+            <span class="close">&times;</span>
+            <h2 id="modal-title">Ajouter un Graphe</h2>
+            <input type="text" id="graph-name" placeholder="Nom du Graphe" />
+
+            <select id="graph-difficulty">
+                <option value="" disabled selected>Veuillez sélectionner une difficulté</option>
+                <option value="Facile">Facile</option>
+                <option value="Moyen">Moyen</option>
+                <option value="Difficile">Difficile</option>
+                <option value="Impossible">Impossible</option>
+            </select>
+
+            <label for="graph-optimal-coloring">Coloration optimale</label>
+            <input type="number" id="graph-optimal-coloring" placeholder="Ex: 3" min="1" />
+
+            <div id="color-config" style="display: none;">
+                <h3>Définissez le nombre de pastilles</h3>
+                <div id="color-inputs"></div>
+            </div>
+
+            <div id="graph-controls" class="admin-buttons">
+                <button id="add-node-btn" class="button-primary">Ajouter un sommet</button>
+                <button id="reorganize-graph-btn-circle">Réorganiser le graphe (Circle)</button>
+                <button id="reorganize-graph-btn-random">Réorganiser le graphe (Random)</button>
+                <button id="reset-graph-btn" class="button button-danger">Réinitialiser le graphe</button>
+
+                <!-- Conteneur du slider avec indicateurs -->
+                <div id="edge-slider-container" style="display: none;">
+                    <h3>Courbure de l'arête :</h3>
+                    <input type="range" id="edge-slider" min="-250" max="250" value="0">
+                </div>
+
+            </div>
+
+            <div id="cy-container" style="width: 100%; height: 475px; margin-top: 20px;"></div>
+            <button id="save-graph-btn" class="button button-success">Sauvegarder</button>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Confirmer la suppression</h2>
+            <p>Êtes-vous sûr de vouloir supprimer ce Graphe ?</p>
+            <button id="confirm-delete-btn" class="button button-danger">Confirmer</button>
+            <button id="cancel-delete-btn" class="button button-grey">Annuler</button>
+        </div>
+    </div>
+    </main>
+    </div>
+</body>
+
+</html>

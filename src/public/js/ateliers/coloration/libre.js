@@ -1,5 +1,5 @@
-import { initGraph, loadPredefinedGraph, resetColorsLibre, populateGraphSelect, rgbToHex } from './functions.js';
-import { addDynamicButton } from '../../functions.js';
+import { initGraph, loadPredefinedGraph, resetColorsLibre, rgbToHex } from './functions.js';
+import { addDynamicButton, populateGraphSelect } from '../../functions.js';
 
 export const initLibreMode = () => {
     const cyLibre = initGraph('cy-predefined', { zoomingEnabled: false, panningEnabled: false, boxSelectionEnabled: false });

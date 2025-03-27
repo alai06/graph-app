@@ -2,20 +2,41 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Graph Workbench - Arbre</title>
+	<title>Graph Workbench - Arbre couvrant</title>
 	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/ateliers/arbre.css">
 	<script type="module" src="/js/main.js"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="/js/ateliers/arbre/main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/cytoscape@3.20.0/dist/cytoscape.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
 
 	<custom-navbar title="L'arbre couvrant"></custom-navbar>
 
-	<section class="container"></section>
+    <section class="container arbre-couvrant">
+        <h2>Arbre couvrant</h2>
+
+        <div id="info-container" style="margin-top: 20px;">
+            <button id="info-btn" style="padding: 10px; font-size: 16px;">ℹ️ Voir les règles</button>
+            <div id="info-section" style="display: none; border: 1px solid #ccc; padding: 15px; margin-top: 15px;">
+                <h3>Principe</h3>
+				<p class="info-text"></p>
+            </div>
+        </div>
+
+		<div id="graph-select" class="styled-select">
+			<select id="predefined-graph-select"></select>
+		</div>
+
+		<div id="dynamic-buttons"></div>
+
+        <div id="cy-predefined" class="cy-container" style="margin-top: 30px;"></div>
+    </section>
 
 	<custom-footer></custom-footer>
-
 </body>
 
 </html>
