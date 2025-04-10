@@ -8,6 +8,7 @@ const graphSchema = new Schema({
 		nodes: [],
 		edges: []
 	},
+	color_edge: { type: String, required: true },
     difficulty: {
         type: String,
         enum: ['Facile', 'Moyen', 'Difficile', 'Impossible'],

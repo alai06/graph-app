@@ -340,7 +340,10 @@ const initializeCytoscape = (data = []) => {
 		container: document.querySelector('#cy-container'),
 		elements: [],
 		style: [
-			{ selector: 'node', style: { 'background-color': '#cccccc' } },
+			{ selector: 'node', style: { 'background-color': '#cccccc', 'width': 5, 'height': 5 },        
+			'width': 30, // Largeur des nœuds
+			'height': 30 // Hauteur des nœuds 
+		},
 			{
 				selector: 'edge',
 				style: {

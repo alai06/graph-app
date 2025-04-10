@@ -246,8 +246,8 @@ const createColorToken = (color, x, y, cy) => {
         position: { x, y },
         style: {
             'background-color': color,
-            'width': 30,
-            'height': 30,
+            'width': 5,
+            'height': 5,
             'label': '',
             'border-width': 2,
             'border-color': '#000',

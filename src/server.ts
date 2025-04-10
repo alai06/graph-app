@@ -27,9 +27,9 @@ try {
 	const app = express();
 
 	// Middleware
-	app.use(express.urlencoded({ extended: false }));
+	app.use(express.urlencoded({ extended: false, limit: '10mb' }));
 	app.use(express.static(resolve('./src/public'), { extensions: ['html', 'css'] }));
-	app.use(express.json());
+	app.use(express.json({ limit: '10mb' }));
 	app.use(cors({
 		origin: "*",
 		methods: ["GET", "POST", "PUT", "DELETE"],
@@ -59,7 +59,7 @@ try {
 	if(process.env.NODE_ENV === "production") {
 		setInterval(async () => {
 			await keepAliveRenderdotCom();
-		}, 30000);
+		}, 3000);
 	};
 
 } catch (error: any) {
